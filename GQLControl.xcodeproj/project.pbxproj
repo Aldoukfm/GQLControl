@@ -7,13 +7,41 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0070C2543D54B852874A9769 /* Pods_GQLControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 145A5DCC8885572985FA4EB8 /* Pods_GQLControl.framework */; };
 		A02D8D79221A649D00B0A42E /* GQLControl.h in Headers */ = {isa = PBXBuildFile; fileRef = A02D8D77221A649D00B0A42E /* GQLControl.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A02D8D80221A64BF00B0A42E /* Apollo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D7F221A64BF00B0A42E /* Apollo.swift */; };
+		A02D8D8B221A6EA300B0A42E /* GQLDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D81221A6EA200B0A42E /* GQLDecodable.swift */; };
+		A02D8D8C221A6EA300B0A42E /* GQLData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D82221A6EA200B0A42E /* GQLData.swift */; };
+		A02D8D8D221A6EA300B0A42E /* QueueController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D83221A6EA200B0A42E /* QueueController.swift */; };
+		A02D8D8E221A6EA300B0A42E /* ObservableOperationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D84221A6EA200B0A42E /* ObservableOperationController.swift */; };
+		A02D8D8F221A6EA300B0A42E /* ApolloOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D85221A6EA200B0A42E /* ApolloOperation.swift */; };
+		A02D8D90221A6EA300B0A42E /* GQLOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D86221A6EA200B0A42E /* GQLOperation.swift */; };
+		A02D8D91221A6EA300B0A42E /* GQLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D87221A6EA200B0A42E /* GQLQuery.swift */; };
+		A02D8D92221A6EA300B0A42E /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D88221A6EA200B0A42E /* Query.swift */; };
+		A02D8D93221A6EA300B0A42E /* GQLDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D89221A6EA300B0A42E /* GQLDecoder.swift */; };
+		A02D8D94221A6EA300B0A42E /* ObservableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */; };
+		A02D8D96221A77A300B0A42E /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D95221A77A300B0A42E /* Result.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0F69FB21B0D00D82F93A5D11 /* Pods-GQLControl.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GQLControl.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GQLControl/Pods-GQLControl.debug.xcconfig"; sourceTree = "<group>"; };
+		145A5DCC8885572985FA4EB8 /* Pods_GQLControl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GQLControl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A48C9F35E1F67B0E5EA6506 /* Pods-GQLControl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GQLControl.release.xcconfig"; path = "Pods/Target Support Files/Pods-GQLControl/Pods-GQLControl.release.xcconfig"; sourceTree = "<group>"; };
 		A02D8D74221A649D00B0A42E /* GQLControl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GQLControl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A02D8D77221A649D00B0A42E /* GQLControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GQLControl.h; sourceTree = "<group>"; };
 		A02D8D78221A649D00B0A42E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A02D8D7F221A64BF00B0A42E /* Apollo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Apollo.swift; sourceTree = "<group>"; };
+		A02D8D81221A6EA200B0A42E /* GQLDecodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GQLDecodable.swift; sourceTree = "<group>"; };
+		A02D8D82221A6EA200B0A42E /* GQLData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GQLData.swift; sourceTree = "<group>"; };
+		A02D8D83221A6EA200B0A42E /* QueueController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueueController.swift; sourceTree = "<group>"; };
+		A02D8D84221A6EA200B0A42E /* ObservableOperationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableOperationController.swift; sourceTree = "<group>"; };
+		A02D8D85221A6EA200B0A42E /* ApolloOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApolloOperation.swift; sourceTree = "<group>"; };
+		A02D8D86221A6EA200B0A42E /* GQLOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GQLOperation.swift; sourceTree = "<group>"; };
+		A02D8D87221A6EA200B0A42E /* GQLQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GQLQuery.swift; sourceTree = "<group>"; };
+		A02D8D88221A6EA200B0A42E /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
+		A02D8D89221A6EA300B0A42E /* GQLDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GQLDecoder.swift; sourceTree = "<group>"; };
+		A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableOperation.swift; sourceTree = "<group>"; };
+		A02D8D95221A77A300B0A42E /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -21,17 +49,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0070C2543D54B852874A9769 /* Pods_GQLControl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E59075BC9EDD79DEF6BE58C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0F69FB21B0D00D82F93A5D11 /* Pods-GQLControl.debug.xcconfig */,
+				3A48C9F35E1F67B0E5EA6506 /* Pods-GQLControl.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		A02D8D6A221A649D00B0A42E = {
 			isa = PBXGroup;
 			children = (
 				A02D8D76221A649D00B0A42E /* GQLControl */,
 				A02D8D75221A649D00B0A42E /* Products */,
+				1E59075BC9EDD79DEF6BE58C /* Pods */,
+				E2CD7C217E1897D7AAD4E81D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -46,10 +86,30 @@
 		A02D8D76221A649D00B0A42E /* GQLControl */ = {
 			isa = PBXGroup;
 			children = (
+				A02D8D7F221A64BF00B0A42E /* Apollo.swift */,
+				A02D8D95221A77A300B0A42E /* Result.swift */,
+				A02D8D85221A6EA200B0A42E /* ApolloOperation.swift */,
+				A02D8D82221A6EA200B0A42E /* GQLData.swift */,
+				A02D8D81221A6EA200B0A42E /* GQLDecodable.swift */,
+				A02D8D89221A6EA300B0A42E /* GQLDecoder.swift */,
+				A02D8D86221A6EA200B0A42E /* GQLOperation.swift */,
+				A02D8D87221A6EA200B0A42E /* GQLQuery.swift */,
+				A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */,
+				A02D8D84221A6EA200B0A42E /* ObservableOperationController.swift */,
+				A02D8D88221A6EA200B0A42E /* Query.swift */,
+				A02D8D83221A6EA200B0A42E /* QueueController.swift */,
 				A02D8D77221A649D00B0A42E /* GQLControl.h */,
 				A02D8D78221A649D00B0A42E /* Info.plist */,
 			);
 			path = GQLControl;
+			sourceTree = "<group>";
+		};
+		E2CD7C217E1897D7AAD4E81D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				145A5DCC8885572985FA4EB8 /* Pods_GQLControl.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -70,6 +130,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A02D8D7C221A649D00B0A42E /* Build configuration list for PBXNativeTarget "GQLControl" */;
 			buildPhases = (
+				C0F9BDE6F819E07BE7F01773 /* [CP] Check Pods Manifest.lock */,
 				A02D8D6F221A649D00B0A42E /* Headers */,
 				A02D8D70221A649D00B0A42E /* Sources */,
 				A02D8D71221A649D00B0A42E /* Frameworks */,
@@ -95,6 +156,7 @@
 				TargetAttributes = {
 					A02D8D73221A649D00B0A42E = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -125,11 +187,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		C0F9BDE6F819E07BE7F01773 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GQLControl-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A02D8D70221A649D00B0A42E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A02D8D8B221A6EA300B0A42E /* GQLDecodable.swift in Sources */,
+				A02D8D92221A6EA300B0A42E /* Query.swift in Sources */,
+				A02D8D94221A6EA300B0A42E /* ObservableOperation.swift in Sources */,
+				A02D8D8D221A6EA300B0A42E /* QueueController.swift in Sources */,
+				A02D8D90221A6EA300B0A42E /* GQLOperation.swift in Sources */,
+				A02D8D91221A6EA300B0A42E /* GQLQuery.swift in Sources */,
+				A02D8D96221A77A300B0A42E /* Result.swift in Sources */,
+				A02D8D80221A64BF00B0A42E /* Apollo.swift in Sources */,
+				A02D8D8E221A6EA300B0A42E /* ObservableOperationController.swift in Sources */,
+				A02D8D8F221A6EA300B0A42E /* ApolloOperation.swift in Sources */,
+				A02D8D8C221A6EA300B0A42E /* GQLData.swift in Sources */,
+				A02D8D93221A6EA300B0A42E /* GQLDecoder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,7 +359,9 @@
 		};
 		A02D8D7D221A649D00B0A42E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0F69FB21B0D00D82F93A5D11 /* Pods-GQLControl.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -278,6 +379,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.aldofuentes.GQLControl;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -285,7 +387,9 @@
 		};
 		A02D8D7E221A649D00B0A42E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A48C9F35E1F67B0E5EA6506 /* Pods-GQLControl.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
