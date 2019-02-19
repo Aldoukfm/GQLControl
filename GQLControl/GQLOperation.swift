@@ -20,14 +20,16 @@ public class GQLOperation<Value, QueryType: GraphQLOperation>: Operation where Q
         super.init()
         completionBlock = { [weak self] in
             guard let self = self else { return }
-            completion?(self.result)
+            self.isCancelled ? nil : completion?(self.result)
         }
     }
     override public func main() {
+        if isCancelled { return }
         result = query.execute()
     }
     
     override public func cancel() {
+        super.cancel()
         query.cancel()
     }
 }
@@ -42,10 +44,12 @@ public class GQLObservableOperation<Value, QueryType: GraphQLOperation>: Observa
     }
     
     override public func main() {
+        if isCancelled { return }
         self.result = query.execute()
     }
     
     override public func cancel() {
+        super.cancel()
         query.cancel()
     }
     

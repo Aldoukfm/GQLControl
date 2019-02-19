@@ -27,7 +27,7 @@ public class ObservableOperation<Value>: UpdateOperation {
         super.init()
         completionBlock = { [weak self] in
             guard let self = self else { return }
-            self.observer?.operation(self, didCompleteWith: self.result)
+            self.isCancelled ? nil : self.observer?.operation(self, didCompleteWith: self.result)
         }
     }
     
