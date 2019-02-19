@@ -6,7 +6,7 @@
 //  Copyright © 2019 softtek. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import protocol Apollo.GraphQLOperation
 
 

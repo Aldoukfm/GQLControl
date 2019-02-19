@@ -7,7 +7,7 @@
 //
 
 
-import UIKit
+import Foundation
 
 open class ObservableOperationController: NSObject {
 

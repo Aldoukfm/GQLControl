@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.version      = "0.0.1"
   s.summary      = "Apollo wrapper library to manage queries."
 
-  s.description  = "Make apollo queries with Result pattern that return custom objects"
+  s.description  = "Make apollo queries with Result pattern that return custom objects."
 
   s.homepage     = "http://EXAMPLE/GQLControl"
 
@@ -40,7 +40,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "GQLControl"
+  s.source_files  = "GQLControl/*.{swift}"
   s.dependency 'Apollo', '~> 0.9.4'
 
 
