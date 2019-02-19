@@ -12,14 +12,14 @@ Pod::Spec.new do |s|
   s.version      = "0.0.1"
   s.summary      = "Apollo wrapper library to manage queries."
 
-  s.description  = "Make apollo queries that return your object without re"
+  s.description  = "Make apollo queries with Result pattern that return custom objects"
 
   s.homepage     = "http://EXAMPLE/GQLControl"
 
   s.license      = "MIT"
 
 
-  s.author             = { "Aldo Fuentes" => "35090917+Aldoukfm@users.noreply.github.com" }
+  s.author             = { "Aldo Fuentes" => "aldo.k.fuentes@gmail.com" }
 
   s.platform     = :ios, "11.0"
 
