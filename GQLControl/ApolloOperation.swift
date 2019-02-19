@@ -12,11 +12,11 @@ import Apollo
 protocol ApolloOperation {
     associatedtype OperationType: GraphQLOperation
     
-    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable
+    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable?
 }
 
 private class _AnyApolloOperationBase<OperationType: GraphQLOperation>: ApolloOperation {
-    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable {
+    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable? {
         fatalError()
     }
     
@@ -27,7 +27,7 @@ private final class _AnyApolloOperationBox<Concrete: ApolloOperation>: _AnyApoll
     init(_ concrete: Concrete) {
         self.concrete = concrete
     }
-    override func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<Concrete.OperationType.Data>?, Error?) -> ()) -> Cancellable {
+    override func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<Concrete.OperationType.Data>?, Error?) -> ()) -> Cancellable? {
         return concrete.execute(on: queue, completion: completion)
     }
 }
@@ -37,7 +37,7 @@ final class AnyApolloOperation<OperationType: GraphQLOperation>: ApolloOperation
     init<Concrete: ApolloOperation>(_ concrete: Concrete) where Concrete.OperationType == OperationType {
         self.box = _AnyApolloOperationBox(concrete)
     }
-    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable {
+    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable? {
         return box.execute(on: queue, completion: completion)
     }
 }
@@ -64,8 +64,8 @@ struct ApolloQuery<Query: GraphQLQuery>: ApolloOperation {
         self.query = query
     }
     
-    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<Query.Data>?, Error?) -> ()) -> Cancellable {
-        return Apollo.shared.client.fetch(query: query, queue: queue) { (result, error) in
+    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<Query.Data>?, Error?) -> ()) -> Cancellable? {
+        return Apollo.shared.fetch(query: query, queue: queue) { (result, error) in
             completion(result, error)
         }
     }
@@ -78,8 +78,8 @@ struct ApolloMutation<Mutation: GraphQLMutation>: ApolloOperation {
         self.mutation = mutation
     }
     
-    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<Mutation.Data>?, Error?) -> ()) -> Cancellable {
-        return Apollo.shared.client.perform(mutation: mutation, queue: queue) { (result, error) in
+    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<Mutation.Data>?, Error?) -> ()) -> Cancellable? {
+        return Apollo.shared.perform(mutation: mutation, queue: queue) { (result, error) in
             completion(result, error)
         }
     }
