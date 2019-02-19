@@ -6,24 +6,24 @@
 //  Copyright © 2019 softtek. All rights reserved.
 //
 
-import Foundation
 
+import UIKit
 
 open class ObservableOperationController: NSObject {
 
     public var id: Int = 0
 
-    var operations: [ID: UpdateOperation] = [:]
+    public var operations: [ID: UpdateOperation] = [:]
     
-    var observers: [ID: [Int: OperationObserver]] = [:]
+    public var observers: [ID: [Int: OperationObserver]] = [:]
     public var queue = OperationQueue.GQLQuery
 
     public func addObserver(_ observer: OperationObserver, for id: ID) {
-        if var currentObservers = observers[id] {
-            currentObservers[observer.id] = observer
-        } else {
-            observers[id] = [observer.id: observer]
-        }
+
+        var newObservers: [Int: OperationObserver] = observers[id] ?? [:]
+        newObservers[observer.id] = observer
+
+        observers.updateValue(newObservers, forKey: id)
     }
 
     public func removeObserver(_ observer: OperationObserver, for id: ID) {
@@ -48,16 +48,18 @@ open class ObservableOperationController: NSObject {
         return operations[id]?.update
     }
     
-}
-
-extension ObservableOperationController: OperationObserver {
-
-    public func operation<Value>(_ operation: ObservableOperation<Value>, didCompleteWith result: Result<Value>) {
-        let id = operation.id
-        operations.removeValue(forKey: id)
-        guard let currentObservers = observers[id] else { return }
+    public func notifyObservers<Value>(of operation: ObservableOperation<Value>, with result: Result<Value>) {
+        guard let currentObservers = observers[operation.id] else { return }
         for observer in currentObservers.values {
             observer.operation(operation, didCompleteWith: result)
         }
     }
+    
+    public func operation<Value>(_ operation: ObservableOperation<Value>, didCompleteWith result: Result<Value>) {
+        operations.removeValue(forKey: operation.id)
+        notifyObservers(of: operation, with: result)
+    }
+    
 }
+
+extension ObservableOperationController: OperationObserver { }

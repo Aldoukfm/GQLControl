@@ -14,12 +14,12 @@ public protocol OperationObserver: class {
 }
 
 public class UpdateOperation: Operation {
-    var update: Any?
+    public var update: Any?
 }
 
 public class ObservableOperation<Value>: UpdateOperation {
     weak var observer: OperationObserver?
-    var id: ID
+    public var id: ID
     var result: Result<Value> = Result.failure(QueryError.nonRequested)
     
     public init(id: ID) {

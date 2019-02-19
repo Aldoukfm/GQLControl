@@ -38,7 +38,7 @@ extension _Query {
 
 
 
-enum QueryError: Error {
+enum QueryError: String, Error {
     case nonImplemented
     case operationTypeNotSupported
     case noData
