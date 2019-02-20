@@ -23,7 +23,7 @@ open class GQLQuery<Value, QueryType: GraphQLOperation>: _GQLQuery where QueryTy
     
     var apolloOperation: AnyApolloOperation<QueryType>
     var decoder: AnyGQLDecoder<QueryType.Data.Result, Value>
-    var queue: DispatchQueue = DispatchQueue.GQLQuery//QueueController.shared.GQLQueryQueue
+    var queue: DispatchQueue = DispatchQueue.GQLQuery
     public var cancellable: Cancellable?
     
     public init<Query: GraphQLQuery>(_ query: Query) where QueryType.Data.Result: Sequence, Value: Sequence, Value.Element: GQLDecodable, Value.Element.Fragment == QueryType.Data.Result.Element, Value: ExpressibleByArrayLiteral {
@@ -62,7 +62,7 @@ open class GQLQuery<Value, QueryType: GraphQLOperation>: _GQLQuery where QueryTy
         self.decoder = AnyGQLDecoder(objectDecoder)
     }
     
-    public func execute(completion: @escaping (Result<Value>)->()) {
+    open func execute(completion: @escaping (Result<Value>)->()) {
         
         let decoder = self.decoder
         cancellable = apolloOperation.execute(on: queue) { (result, error) in
