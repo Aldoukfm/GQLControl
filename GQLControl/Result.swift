@@ -25,7 +25,7 @@ extension Result: CustomStringConvertible {
 }
 
 extension Result {
-    var value: Value? {
+    public var value: Value? {
         switch self {
         case .success(let value):
             return value
@@ -34,7 +34,7 @@ extension Result {
         }
     }
     
-    var error: Error? {
+    public var error: Error? {
         switch self {
         case .success(_):
             return nil
@@ -43,7 +43,7 @@ extension Result {
         }
     }
     
-    func valueOrError() throws -> Value {
+    public func valueOrError() throws -> Value {
         switch self {
         case .success(let value):
             return value

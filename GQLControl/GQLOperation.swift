@@ -25,7 +25,7 @@ public class GQLOperation<Value, QueryType: GraphQLOperation>: Operation where Q
     }
     override public func main() {
         if isCancelled { return }
-        result = query.execute()
+//        result = query.execute()
     }
     
     override public func cancel() {
@@ -45,7 +45,7 @@ public class GQLObservableOperation<Value, QueryType: GraphQLOperation>: Observa
     
     override public func main() {
         if isCancelled { return }
-        self.result = query.execute()
+//        self.result = query.execute()
     }
     
     override public func cancel() {

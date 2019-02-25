@@ -14,7 +14,7 @@ public protocol OperationObserver: class {
 }
 
 public class UpdateOperation: Operation {
-    public var update: Any?
+    @objc public dynamic var update: Any?
 }
 
 public class ObservableOperation<Value>: UpdateOperation {
