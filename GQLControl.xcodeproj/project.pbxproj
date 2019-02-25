@@ -21,6 +21,8 @@
 		A02D8D93221A6EA300B0A42E /* GQLDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D89221A6EA300B0A42E /* GQLDecoder.swift */; };
 		A02D8D94221A6EA300B0A42E /* ObservableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */; };
 		A02D8D96221A77A300B0A42E /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D95221A77A300B0A42E /* Result.swift */; };
+		A08898B72223C20000F591CD /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898B62223C20000F591CD /* AsyncOperation.swift */; };
+		A08898B92223C4D600F591CD /* UpdateOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898B82223C4D600F591CD /* UpdateOperation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,8 @@
 		A02D8D89221A6EA300B0A42E /* GQLDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GQLDecoder.swift; sourceTree = "<group>"; };
 		A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableOperation.swift; sourceTree = "<group>"; };
 		A02D8D95221A77A300B0A42E /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		A08898B62223C20000F591CD /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
+		A08898B82223C4D600F591CD /* UpdateOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,9 +98,11 @@
 				A02D8D89221A6EA300B0A42E /* GQLDecoder.swift */,
 				A02D8D86221A6EA200B0A42E /* GQLOperation.swift */,
 				A02D8D87221A6EA200B0A42E /* GQLQuery.swift */,
+				A08898B82223C4D600F591CD /* UpdateOperation.swift */,
 				A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */,
 				A02D8D84221A6EA200B0A42E /* ObservableOperationController.swift */,
 				A02D8D88221A6EA200B0A42E /* Query.swift */,
+				A08898B62223C20000F591CD /* AsyncOperation.swift */,
 				A02D8D83221A6EA200B0A42E /* QueueController.swift */,
 				A02D8D77221A649D00B0A42E /* GQLControl.h */,
 				A02D8D78221A649D00B0A42E /* Info.plist */,
@@ -218,12 +224,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				A02D8D8B221A6EA300B0A42E /* GQLDecodable.swift in Sources */,
+				A08898B72223C20000F591CD /* AsyncOperation.swift in Sources */,
 				A02D8D92221A6EA300B0A42E /* Query.swift in Sources */,
 				A02D8D94221A6EA300B0A42E /* ObservableOperation.swift in Sources */,
 				A02D8D8D221A6EA300B0A42E /* QueueController.swift in Sources */,
 				A02D8D90221A6EA300B0A42E /* GQLOperation.swift in Sources */,
 				A02D8D91221A6EA300B0A42E /* GQLQuery.swift in Sources */,
 				A02D8D96221A77A300B0A42E /* Result.swift in Sources */,
+				A08898B92223C4D600F591CD /* UpdateOperation.swift in Sources */,
 				A02D8D80221A64BF00B0A42E /* Apollo.swift in Sources */,
 				A02D8D8E221A6EA300B0A42E /* ObservableOperationController.swift in Sources */,
 				A02D8D8F221A6EA300B0A42E /* ApolloOperation.swift in Sources */,

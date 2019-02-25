@@ -9,55 +9,53 @@
 import Foundation
 import protocol Apollo.GraphQLOperation
 
-
-public class GQLOperation<Value, QueryType: GraphQLOperation>: Operation where QueryType.Data: GQLData {
+public class QueryOperation<Query: _Query>: AsyncOperation {
+    var query: Query
+    var result: Result<Query.Value> = Result.failure(QueryError.nonRequested)
+    var completion: ((Result<Query.Value>)->())?
     
-    var query: GQLQuery<Value, QueryType>
-    var result: Result<Value> = Result.failure(QueryError.nonRequested)
-    
-    init(_ query: GQLQuery<Value, QueryType>, completion: ((Result<Value>)->())? = nil) {
+    init(_ query: Query, completion: ((Result<Query.Value>)->())? = nil) {
         self.query = query
-        super.init()
-        completionBlock = { [weak self] in
-            guard let self = self else { return }
-            self.isCancelled ? nil : completion?(self.result)
-        }
+        self.completion = completion
     }
+    
     override public func main() {
         if isCancelled { return }
-//        result = query.execute()
+        query.execute {[weak self] (result) in
+            guard let self = self else { return }
+            if self.isCancelled { return }
+            self.result = result
+            self.completion?(result)
+            self.state = .Finished
+        }
     }
     
-    override public func cancel() {
+    public override func cancel() {
         super.cancel()
         query.cancel()
     }
 }
 
-public class GQLObservableOperation<Value, QueryType: GraphQLOperation>: ObservableOperation<Value> where QueryType.Data: GQLData {
-    
-    var query: GQLQuery<Value, QueryType>
-    
-    init(id: ID, query: GQLQuery<Value, QueryType>) {
+public class QueryObservableOperation<Query: _Query>: ObservableOperation<Query.Value> {
+    var query: Query
+
+    init(id: ID, _ query: Query) {
         self.query = query
         super.init(id: id)
     }
-    
+
     override public func main() {
         if isCancelled { return }
-//        self.result = query.execute()
+        query.execute {[weak self] (result) in
+            guard let self = self else { return }
+            if self.isCancelled { return }
+            self.observer?.operation(self, didCompleteWith: result)
+            self.state = .Finished
+        }
     }
-    
-    override public func cancel() {
+
+    public override func cancel() {
         super.cancel()
         query.cancel()
     }
-    
 }
-
-extension Operation {
-    public func execute(on operation: OperationQueue = OperationQueue.GQLQuery) {
-        operation.addOperation(self)
-    }
-}
-

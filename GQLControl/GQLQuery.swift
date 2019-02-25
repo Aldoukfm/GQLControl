@@ -85,24 +85,4 @@ open class GQLQuery<Value, QueryType: GraphQLOperation>: _GQLQuery where QueryTy
         }
     }
     
-//    public func execute() -> Result<Value> {
-//        var newResult = Result<Value>.failure(QueryError.nonImplemented)
-//        let group = DispatchGroup()
-//        group.enter()
-//        execute { (result) in
-//            newResult = result
-//            group.leave()
-//        }
-//        group.wait()
-//        return newResult
-//    }
-    
-    public func operation(completion: @escaping (Result<Value>)->()) -> GQLOperation<Value, QueryType> {
-        return GQLOperation(self, completion: completion)
-    }
-    
-    public func observableOperation(id: ID) -> GQLObservableOperation<Value, QueryType> {
-        return GQLObservableOperation(id: id, query: self)
-    }
-    
 }

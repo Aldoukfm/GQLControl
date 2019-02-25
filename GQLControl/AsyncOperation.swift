@@ -1,8 +1,9 @@
 //
 //  AsyncOperation.swift
-//  Apollo
+//  GQLControl
 //
-//  Created by Aldo Fuentes on 2/24/19.
+//  Created by Aldo Fuentes on 2/25/19.
+//  Copyright © 2019 aldofuentes. All rights reserved.
 //
 
 import Foundation
@@ -58,10 +59,7 @@ extension AsyncOperation {
     }
     
     override public func cancel() {
+        super.cancel()
         state = .Finished
     }
-}
-
-public class QueryOperation<Query: _Query>: AsyncOperation {
-    
 }
