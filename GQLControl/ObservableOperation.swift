@@ -14,7 +14,7 @@ public protocol OperationObserver: class {
 }
 
 public class ObservableOperation<Value>: UpdateOperation {
-    weak var observer: OperationObserver?
+    public weak var observer: OperationObserver?
     public var id: ID
     
     public init(id: ID) {

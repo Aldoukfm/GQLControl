@@ -42,13 +42,3 @@ extension _Query {
     }
     
 }
-
-
-
-enum QueryError: String, Error {
-    case nonImplemented
-    case operationTypeNotSupported
-    case noData
-    case decodingError
-    case nonRequested = "Query non fetched"
-}

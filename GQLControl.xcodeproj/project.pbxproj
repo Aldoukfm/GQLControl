@@ -15,7 +15,7 @@
 		A02D8D8D221A6EA300B0A42E /* QueueController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D83221A6EA200B0A42E /* QueueController.swift */; };
 		A02D8D8E221A6EA300B0A42E /* ObservableOperationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D84221A6EA200B0A42E /* ObservableOperationController.swift */; };
 		A02D8D8F221A6EA300B0A42E /* ApolloOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D85221A6EA200B0A42E /* ApolloOperation.swift */; };
-		A02D8D90221A6EA300B0A42E /* GQLOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D86221A6EA200B0A42E /* GQLOperation.swift */; };
+		A02D8D90221A6EA300B0A42E /* QueryOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D86221A6EA200B0A42E /* QueryOperation.swift */; };
 		A02D8D91221A6EA300B0A42E /* GQLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D87221A6EA200B0A42E /* GQLQuery.swift */; };
 		A02D8D92221A6EA300B0A42E /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D88221A6EA200B0A42E /* Query.swift */; };
 		A02D8D93221A6EA300B0A42E /* GQLDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D89221A6EA300B0A42E /* GQLDecoder.swift */; };
@@ -23,6 +23,10 @@
 		A02D8D96221A77A300B0A42E /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D95221A77A300B0A42E /* Result.swift */; };
 		A08898B72223C20000F591CD /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898B62223C20000F591CD /* AsyncOperation.swift */; };
 		A08898B92223C4D600F591CD /* UpdateOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898B82223C4D600F591CD /* UpdateOperation.swift */; };
+		A08898BB2224952D00F591CD /* OperationExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898BA2224952D00F591CD /* OperationExt.swift */; };
+		A08898BD22251B6400F591CD /* URLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898BC22251B6400F591CD /* URLQuery.swift */; };
+		A08898BF22251B9000F591CD /* ImageURLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898BE22251B9000F591CD /* ImageURLQuery.swift */; };
+		A08898C122251C1100F591CD /* QueryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898C022251C1100F591CD /* QueryError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,7 +42,7 @@
 		A02D8D83221A6EA200B0A42E /* QueueController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueueController.swift; sourceTree = "<group>"; };
 		A02D8D84221A6EA200B0A42E /* ObservableOperationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableOperationController.swift; sourceTree = "<group>"; };
 		A02D8D85221A6EA200B0A42E /* ApolloOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApolloOperation.swift; sourceTree = "<group>"; };
-		A02D8D86221A6EA200B0A42E /* GQLOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GQLOperation.swift; sourceTree = "<group>"; };
+		A02D8D86221A6EA200B0A42E /* QueryOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryOperation.swift; sourceTree = "<group>"; };
 		A02D8D87221A6EA200B0A42E /* GQLQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GQLQuery.swift; sourceTree = "<group>"; };
 		A02D8D88221A6EA200B0A42E /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
 		A02D8D89221A6EA300B0A42E /* GQLDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GQLDecoder.swift; sourceTree = "<group>"; };
@@ -46,6 +50,10 @@
 		A02D8D95221A77A300B0A42E /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		A08898B62223C20000F591CD /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		A08898B82223C4D600F591CD /* UpdateOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateOperation.swift; sourceTree = "<group>"; };
+		A08898BA2224952D00F591CD /* OperationExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationExt.swift; sourceTree = "<group>"; };
+		A08898BC22251B6400F591CD /* URLQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLQuery.swift; sourceTree = "<group>"; };
+		A08898BE22251B9000F591CD /* ImageURLQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageURLQuery.swift; sourceTree = "<group>"; };
+		A08898C022251C1100F591CD /* QueryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,14 +104,18 @@
 				A02D8D82221A6EA200B0A42E /* GQLData.swift */,
 				A02D8D81221A6EA200B0A42E /* GQLDecodable.swift */,
 				A02D8D89221A6EA300B0A42E /* GQLDecoder.swift */,
-				A02D8D86221A6EA200B0A42E /* GQLOperation.swift */,
+				A02D8D86221A6EA200B0A42E /* QueryOperation.swift */,
 				A02D8D87221A6EA200B0A42E /* GQLQuery.swift */,
+				A08898BE22251B9000F591CD /* ImageURLQuery.swift */,
+				A08898BC22251B6400F591CD /* URLQuery.swift */,
 				A08898B82223C4D600F591CD /* UpdateOperation.swift */,
 				A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */,
 				A02D8D84221A6EA200B0A42E /* ObservableOperationController.swift */,
 				A02D8D88221A6EA200B0A42E /* Query.swift */,
+				A08898C022251C1100F591CD /* QueryError.swift */,
 				A08898B62223C20000F591CD /* AsyncOperation.swift */,
 				A02D8D83221A6EA200B0A42E /* QueueController.swift */,
+				A08898BA2224952D00F591CD /* OperationExt.swift */,
 				A02D8D77221A649D00B0A42E /* GQLControl.h */,
 				A02D8D78221A649D00B0A42E /* Info.plist */,
 			);
@@ -225,15 +237,19 @@
 			files = (
 				A02D8D8B221A6EA300B0A42E /* GQLDecodable.swift in Sources */,
 				A08898B72223C20000F591CD /* AsyncOperation.swift in Sources */,
+				A08898BD22251B6400F591CD /* URLQuery.swift in Sources */,
 				A02D8D92221A6EA300B0A42E /* Query.swift in Sources */,
 				A02D8D94221A6EA300B0A42E /* ObservableOperation.swift in Sources */,
 				A02D8D8D221A6EA300B0A42E /* QueueController.swift in Sources */,
-				A02D8D90221A6EA300B0A42E /* GQLOperation.swift in Sources */,
+				A02D8D90221A6EA300B0A42E /* QueryOperation.swift in Sources */,
 				A02D8D91221A6EA300B0A42E /* GQLQuery.swift in Sources */,
 				A02D8D96221A77A300B0A42E /* Result.swift in Sources */,
+				A08898BB2224952D00F591CD /* OperationExt.swift in Sources */,
 				A08898B92223C4D600F591CD /* UpdateOperation.swift in Sources */,
 				A02D8D80221A64BF00B0A42E /* Apollo.swift in Sources */,
 				A02D8D8E221A6EA300B0A42E /* ObservableOperationController.swift in Sources */,
+				A08898C122251C1100F591CD /* QueryError.swift in Sources */,
+				A08898BF22251B9000F591CD /* ImageURLQuery.swift in Sources */,
 				A02D8D8F221A6EA300B0A42E /* ApolloOperation.swift in Sources */,
 				A02D8D8C221A6EA300B0A42E /* GQLData.swift in Sources */,
 				A02D8D93221A6EA300B0A42E /* GQLDecoder.swift in Sources */,

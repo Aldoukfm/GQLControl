@@ -44,8 +44,18 @@ open class ObservableOperationController: NSObject {
         queue.addOperation(operation)
     }
     
+    public func execute<Value>(_ operations: [ObservableOperation<Value>]) {
+        for op in operations {
+            execute(op)
+        }
+    }
+    
     public func pendingUpdate(for id: ID) -> Any? {
         return operations[id]?.update
+    }
+    
+    public func esExecutingOperation(with id: ID) -> Bool {
+        return operations[id]?.isExecuting ?? false
     }
     
     public func notifyObservers<Value>(of operation: ObservableOperation<Value>, with result: Result<Value>) {
@@ -55,7 +65,7 @@ open class ObservableOperationController: NSObject {
         }
     }
     
-    public func operation<Value>(_ operation: ObservableOperation<Value>, didCompleteWith result: Result<Value>) {
+    open func operation<Value>(_ operation: ObservableOperation<Value>, didCompleteWith result: Result<Value>) {
         operations.removeValue(forKey: operation.id)
         notifyObservers(of: operation, with: result)
     }
