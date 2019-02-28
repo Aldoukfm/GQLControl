@@ -9,19 +9,24 @@
 
 import Foundation
 
+private struct ObserverWrapper {
+    weak var observer: OperationObserver?
+}
+
 open class ObservableOperationController: NSObject {
 
     public var id: Int = 0
 
     public var operations: [ID: UpdateOperation] = [:]
     
-    public var observers: [ID: [Int: OperationObserver]] = [:]
+    private var observers: [ID: [Int: ObserverWrapper]] = [:]
+    
     public var queue = OperationQueue.GQLQuery
 
     public func addObserver(_ observer: OperationObserver, for id: ID) {
-
-        var newObservers: [Int: OperationObserver] = observers[id] ?? [:]
-        newObservers[observer.id] = observer
+        let wrapper = ObserverWrapper(observer: observer)
+        var newObservers: [Int: ObserverWrapper] = observers[id] ?? [:]
+        newObservers[observer.id] = wrapper
 
         observers.updateValue(newObservers, forKey: id)
     }
@@ -54,14 +59,14 @@ open class ObservableOperationController: NSObject {
         return operations[id]?.update
     }
     
-    public func esExecutingOperation(with id: ID) -> Bool {
+    public func isExecutingOperation(with id: ID) -> Bool {
         return operations[id]?.isExecuting ?? false
     }
     
     public func notifyObservers<Value>(of operation: ObservableOperation<Value>, with result: Result<Value>) {
         guard let currentObservers = observers[operation.id] else { return }
-        for observer in currentObservers.values {
-            observer.operation(operation, didCompleteWith: result)
+        for wrapper in currentObservers.values {
+            wrapper.observer?.operation(operation, didCompleteWith: result)
         }
     }
     
