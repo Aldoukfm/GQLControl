@@ -10,9 +10,8 @@ import Foundation
 import protocol Apollo.GraphQLOperation
 
 public class QueryOperation<Query: _Query>: AsyncOperation {
-    var query: Query
-    var result: Result<Query.Value> = Result.failure(QueryError.nonRequested)
-    var completion: ((Result<Query.Value>)->())?
+    private var query: Query
+    private var completion: ((Result<Query.Value>)->())?
     
     init(_ query: Query, completion: ((Result<Query.Value>)->())? = nil) {
         self.query = query
@@ -24,7 +23,6 @@ public class QueryOperation<Query: _Query>: AsyncOperation {
         query.execute {[weak self] (result) in
             guard let self = self else { return }
             if self.isCancelled { return }
-            self.result = result
             self.completion?(result)
             self.state = .Finished
         }
@@ -36,8 +34,9 @@ public class QueryOperation<Query: _Query>: AsyncOperation {
     }
 }
 
-public class QueryObservableOperation<Query: _Query>: ObservableOperation<Query.Value> {
-    var query: Query
+public class QueryObservableOperation<Query: _Query>: ObservableOperation {
+    
+    private var query: Query
 
     init(id: ID, _ query: Query) {
         self.query = query
@@ -46,6 +45,7 @@ public class QueryObservableOperation<Query: _Query>: ObservableOperation<Query.
 
     override public func main() {
         if isCancelled { return }
+        observer?.operation(willBeing: self)
         query.execute {[weak self] (result) in
             guard let self = self else { return }
             if self.isCancelled { return }
@@ -57,5 +57,6 @@ public class QueryObservableOperation<Query: _Query>: ObservableOperation<Query.
     public override func cancel() {
         super.cancel()
         query.cancel()
+        observer?.operation(didCancel: self)
     }
 }

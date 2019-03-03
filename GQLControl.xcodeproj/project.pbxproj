@@ -22,7 +22,6 @@
 		A02D8D94221A6EA300B0A42E /* ObservableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */; };
 		A02D8D96221A77A300B0A42E /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D95221A77A300B0A42E /* Result.swift */; };
 		A08898B72223C20000F591CD /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898B62223C20000F591CD /* AsyncOperation.swift */; };
-		A08898B92223C4D600F591CD /* UpdateOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898B82223C4D600F591CD /* UpdateOperation.swift */; };
 		A08898BB2224952D00F591CD /* OperationExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898BA2224952D00F591CD /* OperationExt.swift */; };
 		A08898BD22251B6400F591CD /* URLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898BC22251B6400F591CD /* URLQuery.swift */; };
 		A08898BF22251B9000F591CD /* ImageURLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898BE22251B9000F591CD /* ImageURLQuery.swift */; };
@@ -49,7 +48,6 @@
 		A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableOperation.swift; sourceTree = "<group>"; };
 		A02D8D95221A77A300B0A42E /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		A08898B62223C20000F591CD /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
-		A08898B82223C4D600F591CD /* UpdateOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateOperation.swift; sourceTree = "<group>"; };
 		A08898BA2224952D00F591CD /* OperationExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationExt.swift; sourceTree = "<group>"; };
 		A08898BC22251B6400F591CD /* URLQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLQuery.swift; sourceTree = "<group>"; };
 		A08898BE22251B9000F591CD /* ImageURLQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageURLQuery.swift; sourceTree = "<group>"; };
@@ -108,7 +106,6 @@
 				A02D8D87221A6EA200B0A42E /* GQLQuery.swift */,
 				A08898BE22251B9000F591CD /* ImageURLQuery.swift */,
 				A08898BC22251B6400F591CD /* URLQuery.swift */,
-				A08898B82223C4D600F591CD /* UpdateOperation.swift */,
 				A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */,
 				A02D8D84221A6EA200B0A42E /* ObservableOperationController.swift */,
 				A02D8D88221A6EA200B0A42E /* Query.swift */,
@@ -245,7 +242,6 @@
 				A02D8D91221A6EA300B0A42E /* GQLQuery.swift in Sources */,
 				A02D8D96221A77A300B0A42E /* Result.swift in Sources */,
 				A08898BB2224952D00F591CD /* OperationExt.swift in Sources */,
-				A08898B92223C4D600F591CD /* UpdateOperation.swift in Sources */,
 				A02D8D80221A64BF00B0A42E /* Apollo.swift in Sources */,
 				A02D8D8E221A6EA300B0A42E /* ObservableOperationController.swift in Sources */,
 				A08898C122251C1100F591CD /* QueryError.swift in Sources */,

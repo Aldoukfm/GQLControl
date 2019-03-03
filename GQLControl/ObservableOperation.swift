@@ -10,10 +10,18 @@ import Foundation
 
 public protocol OperationObserver: class {
     var id: Int { get set }
-    func operation<Value>(_ operation: ObservableOperation<Value>, didCompleteWith result: Result<Value>)
+    func operation<Value>(_ operation: ObservableOperation, didCompleteWith result: Result<Value>)
+    func operation(willBeing operation: ObservableOperation)
+    func operation(didCancel operation: ObservableOperation)
 }
 
-public class ObservableOperation<Value>: UpdateOperation {
+public extension OperationObserver {
+    func operation(willBeing operation: ObservableOperation) {}
+    func operation(didCancel operation: ObservableOperation) {}
+}
+
+public class ObservableOperation: AsyncOperation {
+    @objc public dynamic var update: Any?
     public weak var observer: OperationObserver?
     public var id: ID
     

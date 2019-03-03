@@ -17,9 +17,11 @@ open class ObservableOperationController: NSObject {
 
     public var id: Int = 0
 
-    public var operations: [ID: UpdateOperation] = [:]
+    private var operations: [ID: ObservableOperation] = [:]
     
     private var observers: [ID: [Int: ObserverWrapper]] = [:]
+    
+    public var keepOperations = false
     
     public var queue = OperationQueue.GQLQuery
 
@@ -40,7 +42,7 @@ open class ObservableOperationController: NSObject {
         observers.removeValue(forKey: id)
     }
 
-    public func execute<Value>(_ operation: ObservableOperation<Value>) {
+    public func execute(_ operation: ObservableOperation) {
         if let currentOp = operations[operation.id] {
             currentOp.cancel()
         }
@@ -49,7 +51,7 @@ open class ObservableOperationController: NSObject {
         queue.addOperation(operation)
     }
     
-    public func execute<Value>(_ operations: [ObservableOperation<Value>]) {
+    public func execute(_ operations: [ObservableOperation]) {
         for op in operations {
             execute(op)
         }
@@ -63,16 +65,46 @@ open class ObservableOperationController: NSObject {
         return operations[id]?.isExecuting ?? false
     }
     
-    public func notifyObservers<Value>(of operation: ObservableOperation<Value>, with result: Result<Value>) {
+    public func didFinishOperation(with id: ID) -> Bool {
+        return operations[id]?.isFinished ?? false
+    }
+    
+    public func cancelOperation(with id: ID) {
+        operations[id]?.cancel()
+    }
+    
+    open func operation(didCancel operation: ObservableOperation) {
+        guard let currentObservers = observers[operation.id] else { return }
+        for wrapper in currentObservers.values {
+            wrapper.observer?.operation(didCancel: operation)
+        }
+        if !keepOperations {
+            operations.removeValue(forKey: operation.id)
+        }
+    }
+    
+    open func operation<Value>(_ operation: ObservableOperation, didCompleteWith result: Result<Value>) {
         guard let currentObservers = observers[operation.id] else { return }
         for wrapper in currentObservers.values {
             wrapper.observer?.operation(operation, didCompleteWith: result)
         }
+        if !keepOperations {
+            operations.removeValue(forKey: operation.id)
+        }
     }
     
-    open func operation<Value>(_ operation: ObservableOperation<Value>, didCompleteWith result: Result<Value>) {
-        operations.removeValue(forKey: operation.id)
-        notifyObservers(of: operation, with: result)
+    open func operation(willBeing operation: ObservableOperation) {
+        guard let currentObservers = observers[operation.id] else { return }
+        for wrapper in currentObservers.values {
+            wrapper.observer?.operation(willBeing: operation)
+        }
+    }
+    
+    deinit {
+        for (id, op) in operations {
+            observers.removeValue(forKey: id)
+            op.cancel()
+        }
     }
     
 }
