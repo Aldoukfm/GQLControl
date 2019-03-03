@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "GQLControl"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2 "
   s.summary      = "Apollo wrapper library to manage queries."
 
   s.description  = "Make apollo queries with Result pattern that return custom objects."
