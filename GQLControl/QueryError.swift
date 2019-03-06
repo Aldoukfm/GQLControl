@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum QueryError: String, Error {
+public enum QueryError: String, Error {
     case nonImplemented
     case operationTypeNotSupported
     case noData
