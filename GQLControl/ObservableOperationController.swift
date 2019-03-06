@@ -15,7 +15,7 @@ private struct ObserverWrapper {
 
 open class ObservableOperationController: NSObject {
 
-    public var id: Int = 0
+    public var observerID: Int = 0
 
     private var operations: [ID: ObservableOperation] = [:]
     
@@ -28,14 +28,14 @@ open class ObservableOperationController: NSObject {
     public func addObserver(_ observer: OperationObserver, for id: ID) {
         let wrapper = ObserverWrapper(observer: observer)
         var newObservers: [Int: ObserverWrapper] = observers[id] ?? [:]
-        newObservers[observer.id] = wrapper
+        newObservers[observer.observerID] = wrapper
 
         observers.updateValue(newObservers, forKey: id)
     }
 
     public func removeObserver(_ observer: OperationObserver, for id: ID) {
         guard var currentObservers = observers[id] else { return }
-        currentObservers.removeValue(forKey: observer.id)
+        currentObservers.removeValue(forKey: observer.observerID)
     }
 
     public func removeAllObservers(for id: ID) {

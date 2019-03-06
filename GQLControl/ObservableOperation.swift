@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol OperationObserver: class {
-    var id: Int { get set }
+    var observerID: Int { get set }
     func operation<Value>(_ operation: ObservableOperation, didCompleteWith result: Result<Value>)
     func operation(willBeing operation: ObservableOperation)
     func operation(didCancel operation: ObservableOperation)
