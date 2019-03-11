@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "GQLControl"
-  s.version      = "0.0.4"
+  s.version      = "0.0.6"
   s.summary      = "Apollo wrapper library to manage queries."
 
   s.description  = "Make apollo queries with Result pattern that return custom objects."
@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
   #
 
   s.source_files  = "GQLControl/*.{swift}"
-  s.dependency 'Apollo', '~> 0.9.4'
+  s.dependency 'Apollo', :git => 'https://github.com/apollographql/apollo-ios.git'
 
   s.swift_version = "4.2"
 

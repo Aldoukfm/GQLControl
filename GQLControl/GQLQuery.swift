@@ -25,6 +25,7 @@ open class GQLQuery<Value, QueryType: GraphQLOperation>: _GQLQuery where QueryTy
     var decoder: AnyGQLDecoder<QueryType.Data.Result, Value>
     var queue: DispatchQueue = DispatchQueue.GQLQuery
     public var cancellable: Cancellable?
+    public var didLoadData: ((QueryType.Data)->())?
     
     public init<Query: GraphQLQuery>(_ query: Query) where QueryType.Data.Result: Sequence, Value: Sequence, Value.Element: GQLDecodable, Value.Element.Fragment == QueryType.Data.Result.Element, Value: ExpressibleByArrayLiteral {
         self.apolloOperation = query.asAnyOperation() as! AnyApolloOperation<QueryType>
@@ -65,16 +66,23 @@ open class GQLQuery<Value, QueryType: GraphQLOperation>: _GQLQuery where QueryTy
     open func execute(completion: @escaping (Result<Value>)->()) {
         
         let decoder = self.decoder
+        
+        let didLoadData: ((_ data: QueryType.Data) -> ())? = self.didLoadData
+        
         cancellable = apolloOperation.execute(on: queue) { (result, error) in
             guard error == nil else {
                 completion(Result.failure(error!))
                 return
             }
-            guard let resultData = result?.data?.parseResult() else {
+            guard let rawData = result?.data else {
                 completion(Result.failure(QueryError.noData))
                 return
             }
             
+            guard let resultData = rawData.parseResult() else {
+                completion(Result.failure(QueryError.noData))
+                return
+            }
             do {
                 let newResult = try decoder.decode(Value.self, from: resultData)
                 completion(Result.success(newResult))
@@ -82,6 +90,7 @@ open class GQLQuery<Value, QueryType: GraphQLOperation>: _GQLQuery where QueryTy
                 completion(Result.failure(error))
             }
             
+            didLoadData?(rawData)
         }
     }
     

@@ -13,9 +13,13 @@ public class Apollo {
     
     public static let shared = Apollo()
     var client: ApolloClient? = nil
+    var store: ApolloStore?
     
     public static func configure(url: URL) {
-        Apollo.shared.client = ApolloClient(url: url)
+        let store = ApolloStore(cache: InMemoryNormalizedCache())
+        let client = ApolloClient(networkTransport: HTTPNetworkTransport(url: url), store: store)
+        Apollo.shared.client = client
+        Apollo.shared.store = store
     }
     
     @discardableResult public func fetch<Query: GraphQLQuery>(query: Query, cachePolicy: CachePolicy = .returnCacheDataElseFetch, queue: DispatchQueue = DispatchQueue.main, resultHandler: OperationResultHandler<Query>? = nil) -> Cancellable? {
@@ -35,4 +39,24 @@ public class Apollo {
         }
         return client.perform(mutation: mutation, queue: queue, resultHandler: resultHandler)
     }
+    
+    public func updateCacheOn<Query: GraphQLQuery>(query: Query, _ body: @escaping (inout Query.Data) throws -> Void) throws {
+        guard let store = store else {
+            let error = NSError(domain: "GQLControl", code: -999, userInfo: [NSLocalizedDescriptionKey: "No ApolloClient configured"])
+            throw error
+        }
+        try store.withinReadWriteTransaction { (transaction) in
+            try transaction.update(query: query, body)
+        }.await()
+    }
+    
+    public func watch<Query: GraphQLQuery>(query: Query, cachePolicy: CachePolicy = .returnCacheDataElseFetch, queue: DispatchQueue = DispatchQueue.main, resultHandler: @escaping OperationResultHandler<Query>) -> Cancellable? {
+        guard let client = client else {
+            let error = NSError(domain: "GQLControl", code: -999, userInfo: [NSLocalizedDescriptionKey: "No ApolloClient configured"])
+            resultHandler(nil, error)
+            return nil
+        }
+        return client.watch(query: query, cachePolicy: cachePolicy, queue: queue, resultHandler: resultHandler)
+    }
+    
 }
