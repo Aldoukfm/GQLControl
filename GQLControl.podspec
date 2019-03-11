@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
   #
 
   s.source_files  = "GQLControl/*.{swift}"
-  s.dependency 'Apollo', :git => 'https://github.com/apollographql/apollo-ios.git'
+  s.dependency 'Apollo', '~> 0.9.5'
 
   s.swift_version = "4.2"
 
