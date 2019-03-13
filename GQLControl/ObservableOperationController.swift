@@ -8,9 +8,14 @@
 
 
 import Foundation
+import Apollo
 
-private struct ObserverWrapper {
-    weak var observer: OperationObserver?
+public struct ObserverWrapper {
+    public weak var observer: OperationObserver?
+    
+    public init(_ observer: OperationObserver) {
+        self.observer = observer
+    }
 }
 
 open class ObservableOperationController: NSObject {
@@ -21,21 +26,35 @@ open class ObservableOperationController: NSObject {
     
     private var observers: [ID: [Int: ObserverWrapper]] = [:]
     
+    private var watchers: [ID: Cancellable] = [:]
+    
     public var keepOperations = false
     
     public var queue = OperationQueue.GQLQuery
 
     public func addObserver(_ observer: OperationObserver, for id: ID) {
-        let wrapper = ObserverWrapper(observer: observer)
+        let wrapper = ObserverWrapper(observer)
         var newObservers: [Int: ObserverWrapper] = observers[id] ?? [:]
         newObservers[observer.observerID] = wrapper
 
         observers.updateValue(newObservers, forKey: id)
     }
+    
+    public func addObservers(_ observers: [OperationObserver], for id: ID) {
+        for observer in observers {
+            addObserver(observer, for: id)
+        }
+    }
 
     public func removeObserver(_ observer: OperationObserver, for id: ID) {
         guard var currentObservers = observers[id] else { return }
         currentObservers.removeValue(forKey: observer.observerID)
+    }
+    
+    public func removeObservers(_ observers: [OperationObserver], for id: ID) {
+        for observer in observers {
+            removeObserver(observer, for: id)
+        }
     }
 
     public func removeAllObservers(for id: ID) {
@@ -98,6 +117,25 @@ open class ObservableOperationController: NSObject {
         for wrapper in currentObservers.values {
             wrapper.observer?.operation(willBeing: operation)
         }
+    }
+    
+    open func watch<Query: GraphQLQuery, Value>(query: GQLQuery<Value, Query>, with id: ID) {
+        watchers[id]?.cancel()
+        watchers[id] = query
+        query.watch {[weak self] (result) in
+            guard let value = result.value else { return }
+            print("Did watch value: \(value)")
+            guard let self = self else { return }
+            guard let observers = self.observers[id]?.compactMap({ $0.value.observer }) else { return }
+            
+            for observer in observers {
+                observer.operation(didUpdateCacheWith: value, with: id)
+            }
+        }
+    }
+    
+    open func cancelWatch(onQueryWith id: ID) {
+        watchers[id]?.cancel()
     }
     
     deinit {

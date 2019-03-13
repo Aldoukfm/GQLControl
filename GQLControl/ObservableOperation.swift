@@ -13,11 +13,13 @@ public protocol OperationObserver: class {
     func operation<Value>(_ operation: ObservableOperation, didCompleteWith result: Result<Value>)
     func operation(willBeing operation: ObservableOperation)
     func operation(didCancel operation: ObservableOperation)
+    func operation<Value>(didUpdateCacheWith value: Value, with id: ID)
 }
 
 public extension OperationObserver {
     func operation(willBeing operation: ObservableOperation) {}
     func operation(didCancel operation: ObservableOperation) {}
+    func operation<Value>(didUpdateCacheWith value: Value, with id: ID) {}
 }
 
 public class ObservableOperation: AsyncOperation {

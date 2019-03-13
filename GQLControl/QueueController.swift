@@ -11,6 +11,7 @@ import Foundation
 class QueueController {
     static let shared = QueueController()
     let GQLQueryQueue: DispatchQueue = DispatchQueue(label: "GQLQueryQueue", qos: DispatchQoS.userInteractive, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.workItem, target: nil)
+    let GQLQueryWatcherQueue: DispatchQueue = DispatchQueue(label: "GQLQueryWatcherQueue", qos: DispatchQoS.userInitiated, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.workItem, target: nil)
     let GQLOperationQueue: OperationQueue = {
         let queue = OperationQueue()
         queue.name = "GQLOperationQueue"
@@ -27,5 +28,8 @@ extension OperationQueue {
 extension DispatchQueue {
     public static var GQLQuery: DispatchQueue {
         return QueueController.shared.GQLQueryQueue
+    }
+    public static var GQLQueryWatcher: DispatchQueue {
+        return QueueController.shared.GQLQueryWatcherQueue
     }
 }

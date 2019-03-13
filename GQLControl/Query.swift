@@ -7,11 +7,11 @@
 //
 
 import Foundation
-
+import protocol Apollo.Cancellable
 
 public typealias ID = String
 
-public protocol _Query {
+public protocol _Query: Cancellable {
     associatedtype Value
     
     func execute(completion: @escaping (Result<Value>)->())
