@@ -8,28 +8,31 @@
 
 import Foundation
 
-public class URLQuery: _Query {
+open class URLQuery: _Query {
     
     public typealias Value = Data
     
-    var url: URL?
-    var task: URLSessionDataTask?
+    public var url: URL?
+    public var task: URLSessionDataTask?
+    public var cachePolicy: NSURLRequest.CachePolicy
     
-    public init(url: URL) {
+    public init(url: URL, cachePolicy: NSURLRequest.CachePolicy = .returnCacheDataElseLoad) {
         self.url = url
+        self.cachePolicy = cachePolicy
     }
     
-    public init(url: String?) {
+    public init(url: String?, cachePolicy: NSURLRequest.CachePolicy = .returnCacheDataElseLoad) {
         self.url = URL(string: url?.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? "")
+        self.cachePolicy = cachePolicy
     }
     
-    public func execute(completion: @escaping (Result<Value>) -> ()) {
+    open func execute(completion: @escaping (Result<Value>) -> ()) {
         guard let url = url else {
             completion(Result.failure(QueryError.noURL))
             return
         }
         let session = URLSession.shared
-        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 15)
+        let request = URLRequest(url: url, cachePolicy: self.cachePolicy, timeoutInterval: 15)
         
         task = session.dataTask(with: request) {(data, response, error) in
             var result: Result<Value> = Result.failure(QueryError.nonRequested)
