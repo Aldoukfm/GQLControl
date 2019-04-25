@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0070C2543D54B852874A9769 /* Pods_GQLControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 145A5DCC8885572985FA4EB8 /* Pods_GQLControl.framework */; };
+		A02D05BA226D417400CA18D0 /* MultipartFormDataQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D05B9226D417400CA18D0 /* MultipartFormDataQuery.swift */; };
 		A02D8D79221A649D00B0A42E /* GQLControl.h in Headers */ = {isa = PBXBuildFile; fileRef = A02D8D77221A649D00B0A42E /* GQLControl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A02D8D80221A64BF00B0A42E /* Apollo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D7F221A64BF00B0A42E /* Apollo.swift */; };
 		A02D8D8B221A6EA300B0A42E /* GQLDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D81221A6EA200B0A42E /* GQLDecodable.swift */; };
@@ -21,6 +22,7 @@
 		A02D8D93221A6EA300B0A42E /* GQLDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D89221A6EA300B0A42E /* GQLDecoder.swift */; };
 		A02D8D94221A6EA300B0A42E /* ObservableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */; };
 		A02D8D96221A77A300B0A42E /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D8D95221A77A300B0A42E /* Result.swift */; };
+		A058971722605D0F00C6C25F /* ObservableOperationBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A058971622605D0F00C6C25F /* ObservableOperationBlock.swift */; };
 		A08898B72223C20000F591CD /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898B62223C20000F591CD /* AsyncOperation.swift */; };
 		A08898BB2224952D00F591CD /* OperationExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898BA2224952D00F591CD /* OperationExt.swift */; };
 		A08898BD22251B6400F591CD /* URLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898BC22251B6400F591CD /* URLQuery.swift */; };
@@ -32,6 +34,7 @@
 		0F69FB21B0D00D82F93A5D11 /* Pods-GQLControl.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GQLControl.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GQLControl/Pods-GQLControl.debug.xcconfig"; sourceTree = "<group>"; };
 		145A5DCC8885572985FA4EB8 /* Pods_GQLControl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GQLControl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A48C9F35E1F67B0E5EA6506 /* Pods-GQLControl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GQLControl.release.xcconfig"; path = "Pods/Target Support Files/Pods-GQLControl/Pods-GQLControl.release.xcconfig"; sourceTree = "<group>"; };
+		A02D05B9226D417400CA18D0 /* MultipartFormDataQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipartFormDataQuery.swift; sourceTree = "<group>"; };
 		A02D8D74221A649D00B0A42E /* GQLControl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GQLControl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A02D8D77221A649D00B0A42E /* GQLControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GQLControl.h; sourceTree = "<group>"; };
 		A02D8D78221A649D00B0A42E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -47,6 +50,7 @@
 		A02D8D89221A6EA300B0A42E /* GQLDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GQLDecoder.swift; sourceTree = "<group>"; };
 		A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableOperation.swift; sourceTree = "<group>"; };
 		A02D8D95221A77A300B0A42E /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		A058971622605D0F00C6C25F /* ObservableOperationBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableOperationBlock.swift; sourceTree = "<group>"; };
 		A08898B62223C20000F591CD /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		A08898BA2224952D00F591CD /* OperationExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationExt.swift; sourceTree = "<group>"; };
 		A08898BC22251B6400F591CD /* URLQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLQuery.swift; sourceTree = "<group>"; };
@@ -106,6 +110,8 @@
 				A02D8D87221A6EA200B0A42E /* GQLQuery.swift */,
 				A08898BE22251B9000F591CD /* ImageURLQuery.swift */,
 				A08898BC22251B6400F591CD /* URLQuery.swift */,
+				A02D05B9226D417400CA18D0 /* MultipartFormDataQuery.swift */,
+				A058971622605D0F00C6C25F /* ObservableOperationBlock.swift */,
 				A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */,
 				A02D8D84221A6EA200B0A42E /* ObservableOperationController.swift */,
 				A02D8D88221A6EA200B0A42E /* Query.swift */,
@@ -248,6 +254,8 @@
 				A08898BF22251B9000F591CD /* ImageURLQuery.swift in Sources */,
 				A02D8D8F221A6EA300B0A42E /* ApolloOperation.swift in Sources */,
 				A02D8D8C221A6EA300B0A42E /* GQLData.swift in Sources */,
+				A058971722605D0F00C6C25F /* ObservableOperationBlock.swift in Sources */,
+				A02D05BA226D417400CA18D0 /* MultipartFormDataQuery.swift in Sources */,
 				A02D8D93221A6EA300B0A42E /* GQLDecoder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

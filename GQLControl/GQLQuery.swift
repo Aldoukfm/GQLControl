@@ -27,6 +27,7 @@ open class GQLQuery<Value, QueryType: GraphQLOperation>: _GQLQuery where QueryTy
     public var cancellable: Cancellable?
     public var didLoadData: ((QueryType.Data)->())?
     public var didLoadCache: ((QueryType.Data)->())?
+    public var cachePolicy: CachePolicy = CachePolicy.returnCacheDataElseFetch
     
     public init<Query: GraphQLQuery>(_ query: Query) where QueryType.Data.Result: Sequence, Value: Sequence, Value.Element: GQLDecodable, Value.Element.Fragment == QueryType.Data.Result.Element, Value: ExpressibleByArrayLiteral {
         self.apolloOperation = query.asAnyOperation() as! AnyApolloOperation<QueryType>
@@ -70,7 +71,7 @@ open class GQLQuery<Value, QueryType: GraphQLOperation>: _GQLQuery where QueryTy
         
         let didLoadData: ((_ data: QueryType.Data) -> ())? = self.didLoadData
         
-        cancellable = apolloOperation.execute(on: queue) { (result, error) in
+        cancellable = apolloOperation.execute(on: queue, cachePolicy: cachePolicy) { (result, error) in
             guard error == nil else {
                 completion(Result.failure(error!))
                 return
@@ -101,12 +102,12 @@ open class GQLQuery<Value, QueryType: GraphQLOperation>: _GQLQuery where QueryTy
 extension GQLQuery where QueryType: GraphQLQuery {
     open func watch(completion: @escaping (Result<Value>)->()) {
         
-        self.queue = DispatchQueue.GQLQueryWatcher
+        self.queue = DispatchQueue.GQLQuery
         
         let decoder = self.decoder
         let didLoadCache: ((_ data: QueryType.Data) -> ())? = self.didLoadCache
         
-        cancellable = apolloOperation.watch(on: queue, completion: { (result, error) in
+        cancellable = apolloOperation.watch(on: queue, cachePolicy: cachePolicy, completion: { (result, error) in
             guard error == nil else {
                 completion(Result.failure(error!))
                 return

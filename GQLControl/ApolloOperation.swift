@@ -12,14 +12,14 @@ import Apollo
 protocol ApolloOperation {
     associatedtype OperationType: GraphQLOperation
     
-    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable?
-    func watch(on queue: DispatchQueue, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable?
+    func execute(on queue: DispatchQueue, cachePolicy: CachePolicy, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable?
+    func watch(on queue: DispatchQueue, cachePolicy: CachePolicy, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable?
     func updateCache( _ body: @escaping (inout OperationType.Data) throws -> Void) throws
 }
 
 private class _AnyApolloOperationBase<OperationType: GraphQLOperation>: ApolloOperation {
     
-    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable? {
+    func execute(on queue: DispatchQueue, cachePolicy: CachePolicy, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable? {
         fatalError()
     }
     
@@ -27,7 +27,7 @@ private class _AnyApolloOperationBase<OperationType: GraphQLOperation>: ApolloOp
         fatalError()
     }
     
-    func watch(on queue: DispatchQueue, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable? {
+    func watch(on queue: DispatchQueue, cachePolicy: CachePolicy, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable? {
         fatalError()
     }
 }
@@ -37,12 +37,12 @@ private final class _AnyApolloOperationBox<Concrete: ApolloOperation>: _AnyApoll
     init(_ concrete: Concrete) {
         self.concrete = concrete
     }
-    override func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<Concrete.OperationType.Data>?, Error?) -> ()) -> Cancellable? {
-        return concrete.execute(on: queue, completion: completion)
+    override func execute(on queue: DispatchQueue, cachePolicy: CachePolicy, completion: @escaping (GraphQLResult<Concrete.OperationType.Data>?, Error?) -> ()) -> Cancellable? {
+        return concrete.execute(on: queue, cachePolicy: cachePolicy, completion: completion)
     }
     
-    override func watch(on queue: DispatchQueue, completion: @escaping (GraphQLResult<Concrete.OperationType.Data>?, Error?) -> ()) -> Cancellable? {
-        return concrete.watch(on: queue, completion: completion)
+    override func watch(on queue: DispatchQueue, cachePolicy: CachePolicy, completion: @escaping (GraphQLResult<Concrete.OperationType.Data>?, Error?) -> ()) -> Cancellable? {
+        return concrete.watch(on: queue, cachePolicy: cachePolicy, completion: completion)
     }
     
     override func updateCache(_ body: @escaping (inout Concrete.OperationType.Data) throws -> Void) throws {
@@ -56,11 +56,11 @@ final class AnyApolloOperation<OperationType: GraphQLOperation>: ApolloOperation
     init<Concrete: ApolloOperation>(_ concrete: Concrete) where Concrete.OperationType == OperationType {
         self.box = _AnyApolloOperationBox(concrete)
     }
-    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable? {
-        return box.execute(on: queue, completion: completion)
+    func execute(on queue: DispatchQueue, cachePolicy: CachePolicy, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable? {
+        return box.execute(on: queue, cachePolicy: cachePolicy, completion: completion)
     }
-    func watch(on queue: DispatchQueue, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable? {
-        return box.watch(on: queue, completion: completion)
+    func watch(on queue: DispatchQueue, cachePolicy: CachePolicy, completion: @escaping (GraphQLResult<OperationType.Data>?, Error?) -> ()) -> Cancellable? {
+        return box.watch(on: queue, cachePolicy: cachePolicy, completion: completion)
     }
     func updateCache(_ body: @escaping (inout OperationType.Data) throws -> Void) throws {
         try box.updateCache(body)
@@ -75,16 +75,12 @@ struct ApolloQuery<Query: GraphQLQuery>: ApolloOperation {
         self.query = query
     }
     
-    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<Query.Data>?, Error?) -> ()) -> Cancellable? {
-        return Apollo.shared.fetch(query: query, queue: queue) { (result, error) in
-            completion(result, error)
-        }
+    func execute(on queue: DispatchQueue, cachePolicy: CachePolicy, completion: @escaping (GraphQLResult<Query.Data>?, Error?) -> ()) -> Cancellable? {
+        return Apollo.shared.fetch(query: query, cachePolicy: cachePolicy, queue: queue, resultHandler: completion)
     }
     
-    func watch(on queue: DispatchQueue, completion: @escaping (GraphQLResult<Query.Data>?, Error?) -> ()) -> Cancellable? {
-        return Apollo.shared.watch(query: query, cachePolicy: CachePolicy.returnCacheDataDontFetch, queue: queue, resultHandler: { (result, error) in
-            completion(result, error)
-        })
+    func watch(on queue: DispatchQueue, cachePolicy: CachePolicy, completion: @escaping (GraphQLResult<Query.Data>?, Error?) -> ()) -> Cancellable? {
+        return Apollo.shared.watch(query: query, cachePolicy: cachePolicy, queue: queue, resultHandler: completion)
     }
     
     func updateCache(_ body: @escaping (inout Query.Data) throws -> Void) throws {
@@ -101,7 +97,7 @@ struct ApolloMutation<Mutation: GraphQLMutation>: ApolloOperation {
         self.mutation = mutation
     }
     
-    func execute(on queue: DispatchQueue, completion: @escaping (GraphQLResult<Mutation.Data>?, Error?) -> ()) -> Cancellable? {
+    func execute(on queue: DispatchQueue, cachePolicy: CachePolicy, completion: @escaping (GraphQLResult<Mutation.Data>?, Error?) -> ()) -> Cancellable? {
         return Apollo.shared.perform(mutation: mutation, queue: queue) { (result, error) in
             completion(result, error)
         }
@@ -112,7 +108,7 @@ struct ApolloMutation<Mutation: GraphQLMutation>: ApolloOperation {
         throw error
     }
     
-    func watch(on queue: DispatchQueue, completion: @escaping (GraphQLResult<Mutation.Data>?, Error?) -> ()) -> Cancellable? {
+    func watch(on queue: DispatchQueue, cachePolicy: CachePolicy, completion: @escaping (GraphQLResult<Mutation.Data>?, Error?) -> ()) -> Cancellable? {
         let error = NSError(domain: "GQLControl", code: -998, userInfo: [NSLocalizedDescriptionKey: "Can not update cache on mutation"])
         completion(nil, error)
         return nil
