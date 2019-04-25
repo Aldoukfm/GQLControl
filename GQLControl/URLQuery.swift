@@ -15,6 +15,8 @@ open class URLQuery: _Query {
     public var url: URL?
     public var task: URLSessionDataTask?
     public var cachePolicy: NSURLRequest.CachePolicy
+    public var timeoutInterval: TimeInterval = 15
+    var headers: [String: String] = [:]
     
     public init(url: URL, cachePolicy: NSURLRequest.CachePolicy = .returnCacheDataElseLoad) {
         self.url = url
@@ -22,7 +24,7 @@ open class URLQuery: _Query {
     }
     
     public init(url: String?, cachePolicy: NSURLRequest.CachePolicy = .returnCacheDataElseLoad) {
-        self.url = URL(string: url?.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? "")
+        self.url = URL(string: url ?? "")
         self.cachePolicy = cachePolicy
     }
     
@@ -32,7 +34,11 @@ open class URLQuery: _Query {
             return
         }
         let session = URLSession.shared
-        let request = URLRequest(url: url, cachePolicy: self.cachePolicy, timeoutInterval: 15)
+        var request = createRequest(url: url)
+        
+        for (key, value) in headers {
+            request.setValue(value, forHTTPHeaderField: key)
+        }
         
         task = session.dataTask(with: request) {(data, response, error) in
             var result: Result<Value> = Result.failure(QueryError.nonRequested)
@@ -51,5 +57,13 @@ open class URLQuery: _Query {
     
     public func cancel() {
         task?.cancel()
+    }
+    
+    open func createRequest(url: URL) -> URLRequest {
+        return URLRequest(url: url, cachePolicy: self.cachePolicy, timeoutInterval: self.timeoutInterval)
+    }
+    
+    public func setValue(_ value: String, forHTTPHeaderField field: String) {
+        headers[field] = value
     }
 }
