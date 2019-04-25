@@ -8,22 +8,22 @@
 
 import Foundation
 
-public class ImageURLQuery: _Query {
+open class ImageURLQuery: _Query {
     
     public typealias Value = UIImage
     
-    var query: URLQuery
-    var completionHandlerQueue = DispatchQueue.main
+    public var query: URLQuery
+    public var completionHandlerQueue = DispatchQueue.main
     
     public init(url: URL) {
-        self.query = URLQuery(url: url)
+        self.query = URLQuery(url: url, cachePolicy: .returnCacheDataElseLoad)
     }
     
     public init(url: String?) {
-        self.query = URLQuery(url: url)
+        self.query = URLQuery(url: url, cachePolicy: .returnCacheDataElseLoad)
     }
     
-    public func execute(completion: @escaping (Result<UIImage>) -> ()) {
+    open func execute(completion: @escaping (Result<UIImage>) -> ()) {
         let queue = self.completionHandlerQueue
         query.execute { (result) in
             let newResult: Result<UIImage>
@@ -43,7 +43,7 @@ public class ImageURLQuery: _Query {
         }
     }
     
-    public func cancel() {
+    open func cancel() {
         query.cancel()
     }
 }
