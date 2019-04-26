@@ -14,7 +14,7 @@ public enum MIMEType: String {
     public func fileExtension() -> String {
         switch self {
         case .jpeg:
-            return "jpeg"
+            return "jpg"
         }
     }
 }
