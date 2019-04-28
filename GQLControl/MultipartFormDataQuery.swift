@@ -8,16 +8,16 @@
 
 import Foundation
 
-public enum MIMEType: String {
-    case jpeg = "image/jpeg"
-    
-    public func fileExtension() -> String {
-        switch self {
-        case .jpeg:
-            return "jpg"
-        }
-    }
-}
+//public enum MIMEType: String {
+//    case jpeg = "image/jpeg"
+//    
+//    public func fileExtension() -> String {
+//        switch self {
+//        case .jpeg:
+//            return "jpg"
+//        }
+//    }
+//}
 
 public struct Media {
     public let key: String

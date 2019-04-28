@@ -28,6 +28,7 @@
 		A08898BD22251B6400F591CD /* URLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898BC22251B6400F591CD /* URLQuery.swift */; };
 		A08898BF22251B9000F591CD /* ImageURLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898BE22251B9000F591CD /* ImageURLQuery.swift */; };
 		A08898C122251C1100F591CD /* QueryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08898C022251C1100F591CD /* QueryError.swift */; };
+		A0CE62282274CAFE00C11E20 /* MIMEType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CE62272274CAFE00C11E20 /* MIMEType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		A08898BC22251B6400F591CD /* URLQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLQuery.swift; sourceTree = "<group>"; };
 		A08898BE22251B9000F591CD /* ImageURLQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageURLQuery.swift; sourceTree = "<group>"; };
 		A08898C022251C1100F591CD /* QueryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryError.swift; sourceTree = "<group>"; };
+		A0CE62272274CAFE00C11E20 /* MIMEType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIMEType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 				A08898BE22251B9000F591CD /* ImageURLQuery.swift */,
 				A08898BC22251B6400F591CD /* URLQuery.swift */,
 				A02D05B9226D417400CA18D0 /* MultipartFormDataQuery.swift */,
+				A0CE62272274CAFE00C11E20 /* MIMEType.swift */,
 				A058971622605D0F00C6C25F /* ObservableOperationBlock.swift */,
 				A02D8D8A221A6EA300B0A42E /* ObservableOperation.swift */,
 				A02D8D84221A6EA200B0A42E /* ObservableOperationController.swift */,
@@ -249,6 +252,7 @@
 				A02D8D96221A77A300B0A42E /* Result.swift in Sources */,
 				A08898BB2224952D00F591CD /* OperationExt.swift in Sources */,
 				A02D8D80221A64BF00B0A42E /* Apollo.swift in Sources */,
+				A0CE62282274CAFE00C11E20 /* MIMEType.swift in Sources */,
 				A02D8D8E221A6EA300B0A42E /* ObservableOperationController.swift in Sources */,
 				A08898C122251C1100F591CD /* QueryError.swift in Sources */,
 				A08898BF22251B9000F591CD /* ImageURLQuery.swift in Sources */,
