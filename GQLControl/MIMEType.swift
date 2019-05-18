@@ -657,4 +657,13 @@ public enum MIMEType: String {
     case ZVUE_Media_Manager = "application/vnd.handheld-entertainment+xml"
     case Zzazz_Deck = "application/vnd.zzazz.deck+xml"
     
+    public func fileExtension() -> String {
+        switch self {
+        case .JPEG_Image:
+            return "jpg"
+        default:
+            return ""
+        }
+    }
+    
 }

@@ -29,38 +29,38 @@ open class GQLQuery<Value, QueryType: GraphQLOperation>: _GQLQuery where QueryTy
     public var didLoadCache: ((QueryType.Data)->())?
     public var cachePolicy: CachePolicy = CachePolicy.returnCacheDataElseFetch
     
-    public init<Query: GraphQLQuery>(_ query: Query) where QueryType.Data.Result: Sequence, Value: Sequence, Value.Element: GQLDecodable, Value.Element.Fragment == QueryType.Data.Result.Element, Value: ExpressibleByArrayLiteral {
-        self.apolloOperation = query.asAnyOperation() as! AnyApolloOperation<QueryType>
+    public init<Query: GraphQLQuery>(sequenceQuery: Query) where QueryType.Data.Result: Sequence, Value: Sequence, Value.Element: GQLDecodable, Value.Element.Fragment == QueryType.Data.Result.Element, Value: ExpressibleByArrayLiteral {
+        self.apolloOperation = sequenceQuery.asAnyOperation() as! AnyApolloOperation<QueryType>
         let collectionDecoder = CollectionDecoder<QueryType.Data.Result, Value>()
         self.decoder = AnyGQLDecoder(collectionDecoder)
     }
     
-    public init<Query: GraphQLQuery>(_ query: Query) where Value: GQLDecodable, Value.Fragment == QueryType.Data.Result {
-        self.apolloOperation = query.asAnyOperation() as! AnyApolloOperation<QueryType>
+    public init<Query: GraphQLQuery>(valueQuery: Query) where Value: GQLDecodable, Value.Fragment == QueryType.Data.Result {
+        self.apolloOperation = valueQuery.asAnyOperation() as! AnyApolloOperation<QueryType>
         let objectDecoder = ObjectDecoder<QueryType.Data.Result, Value>()
         self.decoder = AnyGQLDecoder(objectDecoder)
     }
     
-    public init<Query: GraphQLQuery>(_ query: Query) where Value == QueryType.Data.Result {
-        self.apolloOperation = query.asAnyOperation() as! AnyApolloOperation<QueryType>
+    public init<Query: GraphQLQuery>(LiteralQuery: Query) where Value == QueryType.Data.Result {
+        self.apolloOperation = LiteralQuery.asAnyOperation() as! AnyApolloOperation<QueryType>
         let objectDecoder = ScalarDecoder<QueryType.Data.Result, Value>()
         self.decoder = AnyGQLDecoder(objectDecoder)
     }
     
-    public init<Mutation: GraphQLMutation>(_ mutation: Mutation) where QueryType.Data.Result: Sequence, Value: Sequence, Value.Element: GQLDecodable, Value.Element.Fragment == QueryType.Data.Result.Element, Value: ExpressibleByArrayLiteral {
-        self.apolloOperation = mutation.asAnyOperation() as! AnyApolloOperation<QueryType>
+    public init<Mutation: GraphQLMutation>(sequenceMutation: Mutation) where QueryType.Data.Result: Sequence, Value: Sequence, Value.Element: GQLDecodable, Value.Element.Fragment == QueryType.Data.Result.Element, Value: ExpressibleByArrayLiteral {
+        self.apolloOperation = sequenceMutation.asAnyOperation() as! AnyApolloOperation<QueryType>
         let collectionDecoder = CollectionDecoder<QueryType.Data.Result, Value>()
         self.decoder = AnyGQLDecoder(collectionDecoder)
     }
     
-    public init<Mutation: GraphQLMutation>(_ mutation: Mutation) where Value: GQLDecodable, Value.Fragment == QueryType.Data.Result {
-        self.apolloOperation = mutation.asAnyOperation() as! AnyApolloOperation<QueryType>
+    public init<Mutation: GraphQLMutation>(valueMutation: Mutation) where Value: GQLDecodable, Value.Fragment == QueryType.Data.Result {
+        self.apolloOperation = valueMutation.asAnyOperation() as! AnyApolloOperation<QueryType>
         let objectDecoder = ObjectDecoder<QueryType.Data.Result, Value>()
         self.decoder = AnyGQLDecoder(objectDecoder)
     }
     
-    public init<Mutation: GraphQLMutation>(_ mutation: Mutation) where Value == QueryType.Data.Result {
-        self.apolloOperation = mutation.asAnyOperation() as! AnyApolloOperation<QueryType>
+    public init<Mutation: GraphQLMutation>(literalMutation: Mutation) where Value == QueryType.Data.Result {
+        self.apolloOperation = literalMutation.asAnyOperation() as! AnyApolloOperation<QueryType>
         let objectDecoder = ScalarDecoder<QueryType.Data.Result, Value>()
         self.decoder = AnyGQLDecoder(objectDecoder)
     }
