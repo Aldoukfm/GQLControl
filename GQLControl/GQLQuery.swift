@@ -41,8 +41,8 @@ open class GQLQuery<Value, QueryType: GraphQLOperation>: _GQLQuery where QueryTy
         self.decoder = AnyGQLDecoder(objectDecoder)
     }
     
-    public init<Query: GraphQLQuery>(LiteralQuery: Query) where Value == QueryType.Data.Result {
-        self.apolloOperation = LiteralQuery.asAnyOperation() as! AnyApolloOperation<QueryType>
+    public init<Query: GraphQLQuery>(literalQuery: Query) where Value == QueryType.Data.Result {
+        self.apolloOperation = literalQuery.asAnyOperation() as! AnyApolloOperation<QueryType>
         let objectDecoder = ScalarDecoder<QueryType.Data.Result, Value>()
         self.decoder = AnyGQLDecoder(objectDecoder)
     }

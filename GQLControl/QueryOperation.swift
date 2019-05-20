@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import protocol Apollo.GraphQLOperation
 
 public class QueryOperation<Query: _Query>: AsyncOperation {
     private var query: Query

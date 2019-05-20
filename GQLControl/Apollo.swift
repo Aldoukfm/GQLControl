@@ -15,11 +15,15 @@ public class Apollo {
     var client: ApolloClient? = nil
     var store: ApolloStore?
     
-    public static func configure(url: URL) {
+    @discardableResult
+    public static func configure(url: URL, headers: [String: String] = [:]) -> ApolloClient {
         let store = ApolloStore(cache: InMemoryNormalizedCache())
-        let client = ApolloClient(networkTransport: HTTPNetworkTransport(url: url), store: store)
+        let configuration = URLSessionConfiguration.default
+        configuration.httpAdditionalHeaders = headers
+        let client = ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration), store: store)
         Apollo.shared.client = client
         Apollo.shared.store = store
+        return client
     }
     
     @discardableResult public func fetch<Query: GraphQLQuery>(query: Query, cachePolicy: CachePolicy = .returnCacheDataElseFetch, queue: DispatchQueue = DispatchQueue.main, resultHandler: OperationResultHandler<Query>? = nil) -> Cancellable? {
