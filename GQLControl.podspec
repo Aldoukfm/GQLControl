@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
   #
 
   s.source_files  = "GQLControl/*.{swift}"
-  s.dependency 'Apollo', '~> 0.9.5'
+  s.dependency 'Apollo', '~> 0.10.1'
 
   s.swift_version = "4.2"
 
