@@ -8,17 +8,6 @@
 
 import Foundation
 
-//public enum MIMEType: String {
-//    case jpeg = "image/jpeg"
-//    
-//    public func fileExtension() -> String {
-//        switch self {
-//        case .jpeg:
-//            return "jpg"
-//        }
-//    }
-//}
-
 public struct Media {
     public let key: String
     public let filename: String
@@ -40,6 +29,12 @@ open class MultipartFormDataQuery: URLQuery {
     public var mediaArr: [Media]?
     
     public init(url: String?, params: [String: String]? = nil, media: [Media]? = nil) {
+        super.init(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
+        self.params = params
+        self.mediaArr = media
+    }
+    
+    public init(url: URL, params: [String: String]? = nil, media: [Media]? = nil) {
         super.init(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         self.params = params
         self.mediaArr = media

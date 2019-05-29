@@ -14,6 +14,8 @@ public enum QueryError: String, Error {
     case decodingError
     case nonRequested
     case noURL
+    case noOperationQueue
+    case noSelf
 }
 
 extension QueryError: LocalizedError {
@@ -29,6 +31,10 @@ extension QueryError: LocalizedError {
             return "Query did not fetch any data"
         case .noURL:
             return "Query could not initialize URL"
+        case .noOperationQueue:
+            return "No OperationQueue set to execute"
+        case .noSelf:
+            return "No self"
         }
     }
 }
