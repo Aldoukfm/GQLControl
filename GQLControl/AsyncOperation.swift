@@ -53,9 +53,8 @@ extension AsyncOperation {
             state = .Finished
             return
         }
-        
-        main()
         state = .Executing
+        main()
     }
     
     override open func cancel() {
