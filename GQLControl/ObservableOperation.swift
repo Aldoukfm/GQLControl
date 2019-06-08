@@ -37,3 +37,9 @@ public class ObservableOperation: AsyncOperation {
         self.update = update
     }
 }
+
+open class ObservableOperation2: AsyncOperation {
+    @objc public dynamic var update: Any?
+    public weak var observer: QueryObserver?
+    public var id: ID?
+}

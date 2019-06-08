@@ -18,11 +18,21 @@ class QueueController {
         queue.qualityOfService = .userInteractive
         return queue
     }()
+    
+    static var defaultOperationQueue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.name = "DefaultQueue"
+        queue.qualityOfService = QualityOfService.default
+        return queue
+    }()
 }
 
-extension OperationQueue {
+public extension OperationQueue {
     public static var GQLQuery: OperationQueue {
         return QueueController.shared.GQLOperationQueue
+    }
+    static var `default`: OperationQueue {
+        return QueueController.defaultOperationQueue
     }
 }
 extension DispatchQueue {

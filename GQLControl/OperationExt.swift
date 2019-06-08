@@ -9,7 +9,7 @@
 import Foundation
 
 extension Operation {
-    public func execute(on operation: OperationQueue = OperationQueue.GQLQuery) {
+    public func execute(on operation: OperationQueue) {
         operation.addOperation(self)
     }
 }

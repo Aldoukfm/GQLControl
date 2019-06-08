@@ -45,22 +45,24 @@ extension _Query {
 
 public protocol QueryObserver: class {
     var observerID: Int { get set }
-    func operation<Value>(_ operation: Query<Value>, didCompleteWith result: Result<Value>)
-    func operation<Value>(willBeing operation: Query<Value>)
-    func operation<Value>(didCancel operation: Query<Value>)
+    func query<Value>(_ query: Query<Value>, didCompleteWith result: Result<Value>)
+    func query<Value>(willBeing operation: Query<Value>)
+    func query<Value>(didCancel operation: Query<Value>)
 }
 
-open class Query<Value>: AsyncOperation, _Query {
+public extension QueryObserver {
+    func query<Value>(willBeing operation: Query<Value>) { }
+    func query<Value>(didCancel operation: Query<Value>) { }
+}
+
+open class Query<Value>: ObservableOperation2, _Query {
     
     open var queue: OperationQueue?
     
     open var _execution: ( ( ((Result<Value>) -> ())? ) -> ())!
-    open var completion: ((Result<Value>) -> ())?
+    open var _completion: ((Result<Value>) -> ())?
     open var cancellation: (() -> ())?
-    
-    @objc public dynamic var update: Any?
-    public weak var observer: QueryObserver?
-    public var id: ID?
+    open var _catch: ((Error) -> ())?
     
     public init(query: @escaping ( ( ((Result<Value>) -> ())? ) -> ()) ) {
         _execution = query
@@ -82,13 +84,18 @@ open class Query<Value>: AsyncOperation, _Query {
     }
     
     open override func main() {
-        observer?.operation(willBeing: self)
+        observer?.query(willBeing: self)
         _execution {[unowned self] (result) in
             if self.isCancelled { return }
-            self.completion?(result)
-            self.observer?.operation(self, didCompleteWith: result)
+            self._completion?(result)
+            self.observer?.query(self, didCompleteWith: result)
             self.state = .Finished
         }
+    }
+    
+    public func withID(_ id: ID) -> Query<Value> {
+        self.id = id
+        return self
     }
     
     open func execution(completion: @escaping (Result<Value>) -> ()) {
@@ -96,7 +103,7 @@ open class Query<Value>: AsyncOperation, _Query {
     }
     
     open func execute(completion: @escaping (Result<Value>) -> ()) {
-        self.completion = completion
+        self._completion = completion
         let queue = self.queue ?? OperationQueue()
         queue.addOperation(self)
     }
@@ -106,13 +113,13 @@ open class Query<Value>: AsyncOperation, _Query {
         queue.addOperation(self)
     }
     
-    public func then<NewValue>(_ execute: @escaping (Value) -> (Query<NewValue>)) -> Query<NewValue> {
+    public func then<NewValue>(_ execute: @escaping (Value) throws -> (Query<NewValue>)) -> Query<NewValue> {
         let query = ChainQuery.init(query: self, execute: execute)
         query.queue = self.queue
         return query
     }
     
-    public func then<NewValue>(_ execute: @escaping () -> (Query<NewValue>)) -> Query<NewValue> {
+    public func then<NewValue>(_ execute: @escaping () throws -> (Query<NewValue>)) -> Query<NewValue> {
         let query = ChainQuery.init(query: self, execute: execute)
         query.queue = self.queue
         return query
@@ -130,8 +137,20 @@ open class Query<Value>: AsyncOperation, _Query {
         return query
     }
     
-    public func parse<NewValue>(_ transform: @escaping (Value) -> (NewValue)) -> Query<NewValue> {
+    public func map<NewValue>(_ transform: @escaping (Value) throws -> (NewValue)) -> Query<NewValue> {
         let query = ChainQuery<NewValue>.init(query: self, transform: transform)
+        query.queue = self.queue
+        return query
+    }
+    
+    public func `catch`(_ catchBlock: @escaping (Error) -> ()) -> Query<Value> {
+        let query = ChainQuery(query: self, catchBlock: catchBlock)
+        query.queue = self.queue
+        return query
+    }
+    
+    public func `catch`(onMainThread catchBlock: @escaping (Error) -> ()) -> Query<Value> {
+        let query = ChainQuery(query: self, onMainThread: catchBlock)
         query.queue = self.queue
         return query
     }
@@ -139,7 +158,7 @@ open class Query<Value>: AsyncOperation, _Query {
     open override func cancel() {
         super.cancel()
         cancellation?()
-        observer?.operation(didCancel: self)
+        observer?.query(didCancel: self)
     }
     
 }
@@ -154,46 +173,72 @@ class ChainQuery<Value>: Query<Value> {
         super.init(query: query)
     }
     
-    init<OldValue>(query: Query<OldValue>, execute: @escaping (OldValue) -> (Query<Value>)) {
+    init<OldValue>(query: Query<OldValue>, execute: @escaping (OldValue) throws -> (Query<Value>)) {
         super.init { (_) in }
         chainOperations.append(query)
+        
         _execution =  {[unowned self] (completion) in
             
             var then: Query<Value>?
-            query.completion = { result in
+            query._completion = { result in
                 switch result {
                 case .success(let value):
-                    then = execute(value)
+                    do {
+                        then = try execute(value)
+                    } catch {
+                        if let _catch = self._catch {
+                            then = QueryBlock(passingError: error, block: _catch)
+                        } else {
+                            completion?(Result.failure(error))
+                        }
+                    }
                 case .failure(let error):
-                    completion?(Result.failure(error))
+                    if let _catch = self._catch {
+                        then = QueryBlock(passingError: error, block: _catch)
+                    } else {
+                        completion?(Result.failure(error))
+                    }
                 }
             }
             self.executeOperations()
             guard let newQuery = then else { return }
-            newQuery.completion = completion
+            newQuery._completion = completion
             self.chainOperations = [newQuery]
             self.executeOperations()
             
         }
     }
     
-    init<OldValue>(query: Query<OldValue>, execute: @escaping () -> (Query<Value>)) {
+    init<OldValue>(query: Query<OldValue>, execute: @escaping () throws -> (Query<Value>)) {
         super.init { (_) in }
         chainOperations.append(query)
+        
         _execution =  {[unowned self] (completion) in
             
             var then: Query<Value>?
-            query.completion = { result in
+            query._completion = { result in
                 switch result {
-                case .success(let value):
-                    then = execute()
+                case .success:
+                    do {
+                        then = try execute()
+                    } catch {
+                        if let _catch = self._catch {
+                            then = QueryBlock(passingError: error, block: _catch)
+                        } else {
+                            completion?(Result.failure(error))
+                        }
+                    }
                 case .failure(let error):
-                    completion?(Result.failure(error))
+                    if let _catch = self._catch {
+                        then = QueryBlock(passingError: error, block: _catch)
+                    } else {
+                        completion?(Result.failure(error))
+                    }
                 }
             }
             self.executeOperations()
             guard let newQuery = then else { return }
-            newQuery.completion = completion
+            newQuery._completion = completion
             self.chainOperations = [newQuery]
             self.executeOperations()
             
@@ -203,26 +248,33 @@ class ChainQuery<Value>: Query<Value> {
     init(query: Query<Value>, execute: @escaping (Value) throws -> ()) {
         super.init { (_) in }
         chainOperations.append(query)
+        
         _execution =  {[unowned self] (completion) in
             var then: Query<Value>?
-            query.completion = { result in
+            query._completion = { result in
                 switch result {
                 case .success(let value):
+                    let _catch = self._catch
                     then = Query(query: { (completion2) in
                         do {
                             try execute(value)
                             completion2?(result)
                         } catch {
-                            completion2?(Result.failure(error))
+                            _catch?(error)
+                            completion2?(result)
                         }
                     })
                 case .failure(let error):
-                    completion?(Result.failure(error))
+                    if let _catch = self._catch {
+                        then = QueryBlock(passingError: error, block: _catch)
+                    } else {
+                        completion?(Result.failure(error))
+                    }
                 }
             }
             self.executeOperations()
             guard let newQuery = then else { return }
-            newQuery.completion = completion
+            newQuery._completion = completion
             self.chainOperations = [newQuery]
             self.executeOperations()
         }
@@ -231,74 +283,141 @@ class ChainQuery<Value>: Query<Value> {
     init(query: Query<Value>, onMainThread execute: @escaping (Value) -> ()) {
         super.init { (_) in }
         chainOperations.append(query)
+        
+        var then: Query<Value>?
         _execution =  {[unowned self] (completion) in
-            var then: Query<Value>?
-            query.completion = { result in
+            query._completion = { result in
                 switch result {
                 case .success(let value):
-                    then = Query<Value>(query: { (completion2) in
-                        DispatchQueue.main.async {
-                            execute(value)
-                            completion2?(result)
-                        }
-                    })
+                    then = QueryBlock(passingOnMainThread: value, block: execute)
                 case .failure(let error):
-                    DispatchQueue.main.async {
+                    if let _catch = self._catch {
+                        then = QueryBlock(passingError: error, block: _catch)
+                    } else {
                         completion?(Result.failure(error))
                     }
                 }
             }
             self.executeOperations()
             guard let newQuery = then else { return }
-            newQuery.completion = completion
+            newQuery._completion = completion
             self.chainOperations = [newQuery]
             self.executeOperations()
         }
     }
     
-    init<OldValue>(query: Query<OldValue>, transform: @escaping (OldValue) -> (Value)) {
+    init<OldValue>(query: Query<OldValue>, transform: @escaping (OldValue) throws -> (Value)) {
         super.init { (_) in }
         chainOperations.append(query)
+        
         _execution =  {[unowned self] (completion) in
             var then: Query<Value>?
-            query.completion = { result in
+            query._completion = { result in
                 switch result {
                 case .success(let value):
+                    let _catch = self._catch
                     then = Query<Value>(query: { (completion2) in
-                        let newValue = transform(value)
-                        completion2?(Result.success(newValue))
+                        do {
+                            let newValue = try transform(value)
+                            completion2?(Result.success(newValue))
+                        } catch {
+                            _catch?(error)
+                            completion2?(Result.failure(error))
+                        }
                     })
                 case .failure(let error):
-                    completion?(Result.failure(error))
+                    if let _catch = self._catch {
+                        then = QueryBlock(passingError: error, block: _catch)
+                    } else {
+                        completion?(Result.failure(error))
+                    }
                 }
             }
             self.executeOperations()
             guard let newQuery = then else { return }
-            newQuery.completion = completion
+            newQuery._completion = completion
             self.chainOperations = [newQuery]
             self.executeOperations()
         }
     }
     
-    override func then<NewValue>(_ execute: @escaping (Value) -> (Query<NewValue>)) -> Query<NewValue> {
+    init(query: Query<Value>, catchBlock: @escaping (Error) -> ()) {
+        super.init { (_) in }
+        _catch = catchBlock
+        chainOperations.append(query)
+        
+        _execution =  {[unowned self] (completion) in
+            var then: Query<Value>?
+            query._completion = { result in
+                switch result {
+                case .success:
+                    completion?(result)
+                case .failure(let error):
+                    then = QueryBlock(passingError: error, block: catchBlock)
+                }
+            }
+            self.executeOperations()
+            guard let newQuery = then else { return }
+            newQuery._completion = completion
+            self.chainOperations = [newQuery]
+            self.executeOperations()
+        }
+    }
+    
+    init(query: Query<Value>, onMainThread catchBlock: @escaping (Error) -> ()) {
+        super.init { (_) in }
+        _catch = catchBlock
+        chainOperations.append(query)
+        _execution =  {[unowned self] (completion) in
+            var then: Query<Value>?
+            query._completion = { result in
+                switch result {
+                case .success:
+                    completion?(result)
+                case .failure(let error):
+                    then = QueryBlock(passingErrorOnMainThread: error, block: catchBlock)
+                }
+            }
+            self.executeOperations()
+            guard let newQuery = then else { return }
+            newQuery._completion = completion
+            self.chainOperations = [newQuery]
+            self.executeOperations()
+        }
+    }
+    
+    override func then<NewValue>(_ execute: @escaping (Value) throws -> (Query<NewValue>)) -> Query<NewValue> {
 
-        let prevExecution = _execution!
+        
         let query = ChainQuery<NewValue>.init { (_) in }
+        query._catch = self._catch
         query.cancellation = self.cancellation
         query.chainQueue = self.chainQueue
         query.chainOperations = self.chainOperations
         query._execution = {[unowned query] (completion) in
             var then: Query<NewValue>?
-            prevExecution { result in
+            self._execution { result in
                 switch result {
                 case .success(let value):
-                    then = execute(value)
+                    do {
+                        then = try execute(value)
+                    } catch {
+                        if let _catch = query._catch {
+                            then = QueryBlock(passingError: error, block: _catch)
+                        } else {
+                            completion?(Result.failure(error))
+                        }
+                    }
                 case .failure(let error):
-                    completion?(Result.failure(error))
+                    if let _catch = query._catch {
+                        then = QueryBlock(passingError: error, block: _catch)
+                    } else {
+                        completion?(Result.failure(error))
+                    }
                 }
             }
             guard let newQuery = then else { return }
-            newQuery.completion = completion
+            newQuery._completion = completion
             query.chainOperations = [newQuery]
             query.executeOperations()
         }
@@ -306,27 +425,10 @@ class ChainQuery<Value>: Query<Value> {
         return query
     }
     
-    override func then<NewValue>(_ execute: @escaping () -> (Query<NewValue>)) -> Query<NewValue> {
-//        let prevExecution = _execution!
-//        self._execution = {[unowned self] completion in
-//
-//            var then: Query<NewValue>?
-//            prevExecution { result in
-//                switch result {
-//                case .success(let value):
-//                    then = execute()
-//                case .failure(let error):
-//                    completion?(Result.failure(error))
-//                }
-//            }
-//            guard let newQuery = then else { return }
-//            newQuery.completion = (completion as! ((Result<NewValue>) -> ()))
-//            self.chainOperations = [newQuery]
-//            self.executeOperations()
-//        }
-//        return self as! Query<NewValue>
+    override func then<NewValue>(_ execute: @escaping () throws -> (Query<NewValue>)) -> Query<NewValue> {
         
         let query = ChainQuery<NewValue>.init { (_) in }
+        query._catch = self._catch
         query.cancellation = self.cancellation
         query.chainQueue = self.chainQueue
         query.chainOperations = self.chainOperations
@@ -335,14 +437,26 @@ class ChainQuery<Value>: Query<Value> {
             var then: Query<NewValue>?
             self._execution { result in
                 switch result {
-                case .success(let value):
-                    then = execute()
+                case .success:
+                    do {
+                        then = try execute()
+                    } catch {
+                        if let _catch = query._catch {
+                            then = QueryBlock(passingError: error, block: _catch)
+                        } else {
+                            completion?(Result.failure(error))
+                        }
+                    }
                 case .failure(let error):
-                    completion?(Result.failure(error))
+                    if let _catch = query._catch {
+                        then = QueryBlock(passingError: error, block: _catch)
+                    } else {
+                        completion?(Result.failure(error))
+                    }
                 }
             }
             guard let newQuery = then else { return }
-            newQuery.completion = completion
+            newQuery._completion = completion
             query.chainOperations = [newQuery]
             query.executeOperations()
         }
@@ -357,20 +471,26 @@ class ChainQuery<Value>: Query<Value> {
             prevExecution { result in
                 switch result {
                 case .success(let value):
+                    let _catch = self._catch
                     then = Query(query: { (completion2) in
                         do {
                             try execute(value)
                             completion2?(result)
                         } catch {
+                            _catch?(error)
                             completion2?(Result.failure(error))
                         }
                     })
                 case .failure(let error):
-                    completion?(Result.failure(error))
+                    if let _catch = self._catch {
+                        then = QueryBlock(passingError: error, block: _catch)
+                    } else {
+                        completion?(Result.failure(error))
+                    }
                 }
             }
             guard let newQuery = then else { return }
-            newQuery.completion = completion
+            newQuery._completion = completion
             self.chainOperations = [newQuery]
             self.executeOperations()
         }
@@ -380,32 +500,28 @@ class ChainQuery<Value>: Query<Value> {
     override func then(onMainThread execute: @escaping (Value) -> ()) -> Query<Value> {
         let prevExecution = _execution!
         self._execution = {[unowned self] completion in
-            
             var then: Query<Value>?
             prevExecution { result in
                 switch result {
                 case .success(let value):
-                    then = Query(query: { (completion2) in
-                        DispatchQueue.main.async {
-                            execute(value)
-                            completion2?(result)
-                        }
-                    })
+                    then = QueryBlock(passingOnMainThread: value, block: execute)
                 case .failure(let error):
-                    DispatchQueue.main.async {
+                    if let _catch = self._catch {
+                        then = QueryBlock(passingError: error, block: _catch)
+                    } else {
                         completion?(Result.failure(error))
                     }
                 }
             }
             guard let newQuery = then else { return }
-            newQuery.completion = completion
+            newQuery._completion = completion
             self.chainOperations = [newQuery]
             self.executeOperations()
         }
         return self
     }
     
-    override func parse<NewValue>(_ transform: @escaping (Value) -> (NewValue)) -> Query<NewValue> {
+    override func map<NewValue>(_ transform: @escaping (Value) throws -> (NewValue)) -> Query<NewValue> {
         let query = ChainQuery<NewValue>.init { (_) in }
         query.cancellation = self.cancellation
         query.chainQueue = self.chainQueue
@@ -416,21 +532,45 @@ class ChainQuery<Value>: Query<Value> {
             self._execution { result in
                 switch result {
                 case .success(let value):
+                    let _catch = self._catch
                     then = Query(query: { (completion2) in
-                        let transformed = transform(value)
-                        completion2?(Result.success(transformed))
+                        do {
+                            let transformed = try transform(value)
+                            completion2?(Result.success(transformed))
+                        } catch {
+                            _catch?(error)
+                            completion2?(Result.failure(error))
+                        }
                     })
                 case .failure(let error):
-                    completion?(Result.failure(error))
+                    if let _catch = self._catch {
+                        then = QueryBlock(passingError: error, block: _catch)
+                    } else {
+                        completion?(Result.failure(error))
+                    }
                 }
             }
             guard let newQuery = then else { return }
-            newQuery.completion = completion
+            newQuery._completion = completion
             query.chainOperations = [newQuery]
             query.executeOperations()
         }
         
         return query
+    }
+    
+    override func `catch`(_ catchBlock: @escaping (Error) -> ()) -> Query<Value> {
+        _catch = catchBlock
+        return self
+    }
+    
+    override func `catch`(onMainThread catchBlock: @escaping (Error) -> ()) -> Query<Value> {
+        _catch = { error in
+            DispatchQueue.main.async {
+                catchBlock(error)
+            }
+        }
+        return self
     }
     
     func executeOperations() {
@@ -445,6 +585,28 @@ class ChainQuery<Value>: Query<Value> {
     }
 }
 
+public func firstly(_ execute: @escaping () throws -> ()) -> Query<Void> {
+    return Query<Void>.init(query: { (completion) in
+        func empty() -> Void {}
+        do {
+            try execute()
+            completion?(Result.success(empty()))
+        } catch {
+            completion?(Result.failure(error))
+        }
+    })
+}
+
+public func firstly<Value>(_ execute: @escaping () throws -> (Value)) -> Query<Value> {
+    return Query<Value>.init(query: { (completion) in
+        do {
+            let value = try execute()
+            completion?(Result.success(value))
+        } catch {
+            completion?(Result.failure(error))
+        }
+    })
+}
 
 public extension Error {
     func queryThrowingError<Value>() -> Query<Value> {
@@ -460,6 +622,42 @@ public func QuerySuccess<Value>(_ value: Value) -> Query<Value> {
 
 public func QueryThrowError<Value>(_ error: Error) -> Query<Value> {
     return Query(query: { (completion) in
+        completion?(Result.failure(error))
+    })
+}
+
+public func QueryBlock<Value>(passing value: Value, block: @escaping (Value) throws -> ()) -> Query<Value> {
+    return Query(query: { (completion) in
+        do {
+            try block(value)
+            completion?(Result.success(value))
+        } catch {
+            completion?(Result.failure(error))
+        }
+    })
+}
+
+public func QueryBlock<Value>(passingError error: Error, block: @escaping (Error) -> ()) -> Query<Value> {
+    return Query(query: { (completion) in
+        block(error)
+        completion?(Result.failure(error))
+    })
+}
+
+public func QueryBlock<Value>(passingOnMainThread value: Value, block: @escaping (Value) -> ()) -> Query<Value> {
+    return Query(query: { (completion) in
+        DispatchQueue.main.async {
+            block(value)
+        }
+        completion?(Result.success(value))
+    })
+}
+
+public func QueryBlock<Value>(passingErrorOnMainThread error: Error, block: @escaping (Error) -> ()) -> Query<Value> {
+    return Query(query: { (completion) in
+        DispatchQueue.main.async {
+            block(error)
+        }
         completion?(Result.failure(error))
     })
 }
