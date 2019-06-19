@@ -28,7 +28,7 @@ class QueueController {
 }
 
 public extension OperationQueue {
-    public static var GQLQuery: OperationQueue {
+    static var GQLQuery: OperationQueue {
         return QueueController.shared.GQLOperationQueue
     }
     static var `default`: OperationQueue {

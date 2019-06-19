@@ -246,9 +246,13 @@ open class ObservableOperationController2: NSObject, QueryObserver {
         for wrapper in currentObservers.values {
             wrapper.observer?.query(operation, didCompleteWith: result)
         }
-        if !keepOperations {
-            operations.removeValue(forKey: id)
-        }
+//        if !keepOperations {
+//            if let index = operations.index(forKey: id) {
+//                operations[id] = nil
+////                operations.remove(at: index)
+//            }
+////            operations.removeValue(forKey: id)
+//        }
     }
     
     open func query<Value>(willBeing operation: Query<Value>) {

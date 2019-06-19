@@ -70,8 +70,8 @@ open class Query<Value>: ObservableOperation2, _Query {
     
     public override init() {
         super.init()
-        _execution = {[unowned self] completion in
-            self.execution(completion: { (result) in
+        _execution = {[weak self] completion in
+            self?.execution(completion: { (result) in
                 completion?(result)
             })
         }
@@ -85,7 +85,8 @@ open class Query<Value>: ObservableOperation2, _Query {
     
     open override func main() {
         observer?.query(willBeing: self)
-        _execution {[unowned self] (result) in
+        _execution {[weak self] (result) in
+            guard let self = self else { return }
             if self.isCancelled { return }
             self._completion?(result)
             self.observer?.query(self, didCompleteWith: result)
@@ -156,9 +157,9 @@ open class Query<Value>: ObservableOperation2, _Query {
     }
     
     open override func cancel() {
-        super.cancel()
         cancellation?()
         observer?.query(didCancel: self)
+        super.cancel()
     }
     
 }
@@ -578,10 +579,10 @@ class ChainQuery<Value>: Query<Value> {
     }
     
     override func cancel() {
-        super.cancel()
         for op in chainOperations {
             op.cancel()
         }
+        super.cancel()
     }
 }
 
